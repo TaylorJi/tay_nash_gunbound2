@@ -3,5 +3,9 @@ abstract public class AbstractPlayer {
 
   public abstract void move();
 
+  public abstract void setAngle();
+  public abstract void setPower();
+  public abstract void fire();
+  public abstract void collide();
 
 }
