@@ -22,8 +22,6 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     } else {
       xPos = getPosition().x + direction;
     }
-
-//    PVector temp = new PVector(getPosition().x + direction, getPosition().y);
     PVector temp = new PVector(xPos, yPos);
     this.setPosition(temp);
   }

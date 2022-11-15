@@ -1,9 +1,11 @@
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
@@ -18,13 +20,16 @@ public class Window extends PApplet{
   // turn = true means player1's turn.
   protected boolean turn = false;
 //  protected boolean turn = true;
-
-  PFont font;
+  protected boolean title = true;
+  PImage img;
 
   private Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   private Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
 
   public void draw() {
+    if (this.title) {
+      showTitle();
+    }
     background(10);
     ball.move(this);
     ball.draw(this);
@@ -33,7 +38,16 @@ public class Window extends PApplet{
     drawDashboard();
     drawHp();
     drawFuel();
+  }
 
+  public void showTitle() {
+    image(img, 0, 0);
+    try {
+      TimeUnit.SECONDS.sleep(3);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+    this.title = !this.title;
   }
 
   public void drawDashboard() {
@@ -71,6 +85,7 @@ public class Window extends PApplet{
 
   public void settings() {
     size(this.width, this.height);
+    img = loadImage("title.jpg");
   }
   @Override
   public void keyPressed(KeyEvent event) {
