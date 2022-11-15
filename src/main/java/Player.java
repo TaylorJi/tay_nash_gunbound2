@@ -51,6 +51,8 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     return this.hp;
   }
 
+  public int setHp(int hp) {return this.hp = this.hp - hp;}
+
   @Override
   public void setHp(int hp) {
     this.hp -= hp;
@@ -92,10 +94,6 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     return null;
   }
 
-  @Override
-  public PVector getRadius() {
-    return null;
-  }
 
   @Override
   public PVector getPower() {

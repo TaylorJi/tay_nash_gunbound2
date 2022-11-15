@@ -7,6 +7,8 @@ import processing.event.KeyEvent;
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
+import java.util.ArrayList;
+
 public class Window extends PApplet{
   // create tempPos and tempDir for now
   protected PVector tempPos = new PVector(2f, 2f);
@@ -22,6 +24,9 @@ public class Window extends PApplet{
 //  protected boolean turn = true;
   protected boolean title = true;
   PImage img;
+  protected int dashboardHeight = this.height - 130;
+
+  PFont font;
 
   protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
@@ -31,10 +36,11 @@ public class Window extends PApplet{
       showTitle();
     }
     background(10);
-    ball.move(this);
-    ball.draw(this);
     leftPlayer.draw(this);
     rightPlayer.draw(this);
+    ball.draw(this);
+    ball.move(this);
+
     drawDashboard();
     drawHp();
     drawFuel();
@@ -50,9 +56,11 @@ public class Window extends PApplet{
     this.title = !this.title;
   }
 
-  public void drawDashboard() {
+    public void drawDashboard() {
     textSize(20);
     fill(3, 253, 247);
+    line(0, dashboardHeight, this.width, dashboardHeight); // if the border is this.height - 120, then overlap the player name
+    stroke(200);
     text("Player1", 50, this.height - 100);
     text("Player2", this.width - 300, this.height - 100);
     textSize(18);
@@ -83,7 +91,6 @@ public class Window extends PApplet{
     this.rect(this.width - 240, this.height - 40, rightPlayer.getFuel(), 10);
   }
 
-
   public void settings() {
     size(this.width, this.height);
     img = loadImage("title.jpg");
@@ -101,7 +108,6 @@ public class Window extends PApplet{
     if ((currentPlayer == null) || (currentPlayer.fuel == 0)){
       return;
     }
-
     switch (event.getKeyCode()) {
       case RIGHT:
         currentPlayer.move(10);
