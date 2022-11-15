@@ -5,15 +5,18 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   protected float width = 30.0F;
   protected float height = 30.0F;
 
+  protected int hp = 100;
 
+  protected int fuel = 100;
 
   public Player(PVector position, Window window) {
     super(position, window);
   }
 
   @Override
-  public void move() {
-
+  public void move(int direction) {
+    PVector temp = new PVector(getPosition().x + direction, getPosition().y);
+    this.setPosition(temp);
   }
 
   @Override
@@ -37,12 +40,24 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
+  public int getHp() {
+    return this.hp;
+  }
+
+  @Override
+  public int getFuel() {
+    return this.fuel;
+  }
+
+  @Override
+  public void setPosition(PVector position) {
+    this.position = position;
+  }
+
+  @Override
   public void draw(Window window) {
     window.fill(this.fillColour);
     window.rect(this.position.x, this.position.y, this.width, this.height);
-
-
-
   }
 
   @Override
@@ -52,7 +67,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   @Override
   public PVector getPosition() {
-    return null;
+    return this.position;
   }
 
   @Override

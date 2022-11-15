@@ -10,12 +10,15 @@ abstract public class AbstractPlayer {
 
   private String name;
 
-  public abstract void move();
-
+  public abstract void move(int direction);
   public abstract void setAngle();
   public abstract void setPower();
   public abstract void fire();
   public abstract void collide();
+  public abstract int getHp();
+  public abstract int getFuel();
+  public abstract void setPosition(PVector position);
+  public abstract PVector getPosition();
 
   public abstract void draw(Window window);
 
