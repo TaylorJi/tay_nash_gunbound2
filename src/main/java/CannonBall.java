@@ -9,6 +9,7 @@ public class CannonBall {
   Window window;
   private float xpos;
   private float ypos;
+  private float speed = 1f;
 
   private float width = (float) 30;
 
@@ -32,9 +33,11 @@ public class CannonBall {
     return false;
   }
 
-  public void move() {
+  public void move(Window window) {
     //this method will be implemented from IMovable interface
     // cannonball moves toward in certain direction
+    this.position = this.position.add(this.direction.mult(speed));
+
   }
 
   public void draw(Window window) {
