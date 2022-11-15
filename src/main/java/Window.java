@@ -48,7 +48,7 @@ public class Window extends PApplet{
     this.rect(100, this.height - 70, leftPlayer.getHp(), 10);
 
     // for player2
-    this.rect(this.width - 240, this.height - 70, leftPlayer.getHp(), 10);
+    this.rect(this.width - 240, this.height - 70, rightPlayer.getHp(), 10);
   }
 
   public void drawFuel() {
@@ -57,7 +57,7 @@ public class Window extends PApplet{
     this.rect(100, this.height - 40, leftPlayer.getFuel(), 10);
 
     // for player2
-    this.rect(this.width - 240, this.height - 40, leftPlayer.getFuel(), 10);
+    this.rect(this.width - 240, this.height - 40, rightPlayer.getFuel(), 10);
   }
 
   public void settings() {
