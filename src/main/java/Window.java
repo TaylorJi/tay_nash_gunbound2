@@ -6,7 +6,11 @@ import processing.event.KeyEvent;
 import java.awt.*;
 
 public class Window extends PApplet{
-  private CannonBall ball = new CannonBall((float) 30, (float) 30, this);
+  // create tempPos and tempDir for now
+  private PVector tempPos = new PVector(2f, 2f);
+  private PVector tempDir = new PVector(1f, 1f);
+
+  private CannonBall ball = new CannonBall( tempPos, tempDir,this);
 
   private int width = 1280;
   private int height = 720;
@@ -18,6 +22,7 @@ public class Window extends PApplet{
 
   public void draw() {
     background(10);
+    ball.move(this);
     ball.draw(this);
     leftPlayer.draw(this);
     rightPlayer.draw(this);

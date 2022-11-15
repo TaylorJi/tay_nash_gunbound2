@@ -4,7 +4,7 @@ We are building a cannon shooting game. Each player has a movable base, and it h
 This is turn-based game. If one of base's HP becomes 0, then the other player wins the game.
 The player can choose a ball type.
 The base can launch a cannonball. If the ball hits an opponent, the HP will decrease based on the ball type.
-Ball has various types.
+CannonBall has various types.
 black: basic, if it hits, then damages 5HP.
 red: more damage - if it hits, then damages 15HP
 yellow: more speed - this ball is the fastest ball

@@ -9,6 +9,7 @@ public class CannonBall {
   Window window;
   private float xpos;
   private float ypos;
+  private float speed = 1f;
 
   private float width = (float) 30;
 
@@ -18,29 +19,49 @@ public class CannonBall {
   int fillColour = 255;
 
 
-  public CannonBall(float xin, float yin, Window window) {
-    this.xpos = xin;
-    this.ypos = yin;
+  public CannonBall(PVector position, PVector direction, Window window) {
+    this.position = position;
+    this.direction = direction;
     this.window = window;
-
   }
 
 
-  public boolean isHit() {
-    // if the cannonball hits, obstacle the move to the next turn
-    // if the cannonball hits the other opponent, then loses the opponent's hp
-    return false;
+//  public boolean isHitPlayer(Player player, Window window) {
+//    // if the cannonball hits the other opponent, then loses the opponent's hp, and ends turn
+//    // if not, ends the turn
+//    return false;
+//  }
+
+
+  public boolean outOfBounds(Window window) {
+    if ((this.position.x > window.width
+            || this.position.x < 0)
+            || (this.position.y > window.height
+            || this.position.y < 0)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  public void move() {
+  public void bounce(float b) {
+    this.direction.rotate(b);
+  }
+  public void move(Window window) {
     //this method will be implemented from IMovable interface
     // cannonball moves toward in certain direction
+
+    this.position = this.position.add(this.direction.mult(speed));
+    if (outOfBounds(window)) {
+      bounce((float) Math.PI / 4f);
+    }
+
   }
 
   public void draw(Window window) {
     window.fill(this.fillColour);
-    window.ellipse(this.xpos,
-            this.ypos,
+    window.ellipse(this.position.x,
+            this.position.y,
             this.width,
             this.height);
   }
