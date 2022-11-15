@@ -14,6 +14,10 @@ public class Window extends PApplet{
   protected int width = 1280;
   protected int height = 720;
 
+  // turn = false means player1's turn.
+  // turn = true means player1's turn.
+  protected boolean turn = false;
+
   PFont font;
 
   private Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
@@ -70,18 +74,30 @@ public class Window extends PApplet{
   @Override
   public void keyPressed(KeyEvent event) {
     super.keyPressed(event);
-    if (leftPlayer == null) {
+    Player CurrentPlayer;
+    if (!this.turn) {
+      CurrentPlayer = leftPlayer;
+    } else {
+      CurrentPlayer = rightPlayer;
+    }
+
+    if (CurrentPlayer == null) {
       return;
     }
     switch (event.getKeyCode()) {
       case RIGHT:
-        leftPlayer.move(10);
+        CurrentPlayer.move(10);
         break;
       case LEFT:
-        leftPlayer.move(-10);
+        CurrentPlayer.move(-10);
         break;
       default:
         break;
+    }
+    if (!this.turn) {
+      leftPlayer = CurrentPlayer;
+    } else {
+      rightPlayer = CurrentPlayer;
     }
   }
 
