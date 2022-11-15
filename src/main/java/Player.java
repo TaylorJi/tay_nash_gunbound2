@@ -1,8 +1,11 @@
+import processing.core.PFont;
 import processing.core.PVector;
 public class Player extends AbstractPlayer implements ICollidable, IMovable {
   protected int fillColour = 100;
   protected float width = 30.0F;
   protected float height = 30.0F;
+
+
 
   public Player(PVector position, Window window) {
     super(position, window);
@@ -37,6 +40,8 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void draw(Window window) {
     window.fill(this.fillColour);
     window.rect(this.position.x, this.position.y, this.width, this.height);
+
+
 
   }
 
