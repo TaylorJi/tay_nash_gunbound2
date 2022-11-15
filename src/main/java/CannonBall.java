@@ -26,11 +26,11 @@ public class CannonBall {
   }
 
 
-  public boolean isHitPlayer(Player player, Window window) {
-    // if the cannonball hits the other opponent, then loses the opponent's hp, and ends turn
-    // if not, ends the turn
-    return false;
-  }
+//  public boolean isHitPlayer(Player player, Window window) {
+//    // if the cannonball hits the other opponent, then loses the opponent's hp, and ends turn
+//    // if not, ends the turn
+//    return false;
+//  }
 
 
   public boolean outOfBounds(Window window) {
