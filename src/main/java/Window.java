@@ -5,10 +5,14 @@ import processing.event.KeyEvent;
 
 import java.awt.*;
 
+import java.util.ArrayList;
+
 public class Window extends PApplet{
   // create tempPos and tempDir for now
   private PVector tempPos = new PVector(2f, 2f);
   private PVector tempDir = new PVector(1f, 1f);
+
+  private ArrayList<CannonBall>removeCannonball = new ArrayList<>();
 
   private CannonBall ball = new CannonBall( tempPos, tempDir,this);
   protected int width = 1280;
