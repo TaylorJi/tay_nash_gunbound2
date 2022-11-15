@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
-  protected PVector tempPos = new PVector(2f, 2f);
-  protected PVector tempDir = new PVector(1f, 1f);
+  protected PVector tempPos = new PVector(50, this.height + 500);
+  protected PVector tempDir = new PVector(1f, 1f).normalize();
 
   protected CannonBall ball = new CannonBall(tempPos, tempDir,this);
   protected int width = 1280;
@@ -32,9 +32,9 @@ public class Window extends PApplet{
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
 
   public void draw() {
-    if (this.title) {
-      showTitle();
-    }
+//    if (this.title) {
+//      showTitle();
+//    }
     background(10);
     leftPlayer.draw(this);
     rightPlayer.draw(this);
@@ -60,7 +60,7 @@ public class Window extends PApplet{
     textSize(20);
     fill(3, 253, 247);
     line(0, dashboardHeight, this.width, dashboardHeight); // if the border is this.height - 120, then overlap the player name
-    stroke(200);
+//    stroke(200);
     text("Player1", 50, this.height - 100);
     text("Player2", this.width - 300, this.height - 100);
     textSize(18);
