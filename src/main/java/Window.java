@@ -67,7 +67,7 @@ public class Window extends PApplet{
 
   public void drawHp() {
     // for player1
-    this.fill(146, 208, 80);
+    this.fill(249, 227, 41);
     this.rect(100, this.height - 70, leftPlayer.getHp(), 10);
 
     // for player2
