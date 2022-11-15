@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
-  private PVector tempPos = new PVector(2f, 2f);
-  private PVector tempDir = new PVector(1f, 1f);
+  protected PVector tempPos = new PVector(65, this.height + 500);
+  protected PVector tempDir = new PVector(1f, 1f).normalize();
 
   private ArrayList<CannonBall>removeCannonball = new ArrayList<>();
 
@@ -74,6 +74,7 @@ public class Window extends PApplet{
 
   public void settings() {
     size(this.width, this.height);
+//    tempPos = leftPlayer.position;
   }
   @Override
   public void keyPressed(KeyEvent event) {
