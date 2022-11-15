@@ -9,12 +9,14 @@ import java.util.ArrayList;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
-  protected PVector tempPos = new PVector(65, this.height + 500);
-  protected PVector tempDir = new PVector(1f, 1f).normalize();
+  private PVector tempPos = new PVector(50, this.height + 500);
+  private PVector tempDir = new PVector(1f, 1f).normalize();
 
   private ArrayList<CannonBall>removeCannonball = new ArrayList<>();
 
-  private CannonBall ball = new CannonBall( tempPos, tempDir,this);
+  protected CannonBall ball = new CannonBall( tempPos, tempDir,this);
+
+
   protected int width = 1280;
   protected int height = 720;
 
@@ -27,10 +29,12 @@ public class Window extends PApplet{
 
   public void draw() {
     background(10);
-    ball.draw(this);
-    ball.move(this);
+
     leftPlayer.draw(this);
     rightPlayer.draw(this);
+    ball.draw(this);
+    ball.move(this);
+
     drawDashboard();
     drawHp();
     drawFuel();

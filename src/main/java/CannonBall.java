@@ -8,11 +8,11 @@ public class CannonBall implements IMovable, ICollidable{
   //type creates a new class?
 
   Window window;
-  private float speed = 0;
+  protected float speed = 0;
 
-  private float width = (float) 30;
+  protected float width = (float) 30;
 
-  private float height = (float) 30;
+  protected float height = (float) 30;
 
   protected float radious = (float) 30 / 2;
 
@@ -96,6 +96,10 @@ public class CannonBall implements IMovable, ICollidable{
             this.height);
   }
 
+  public float getRadius() {
+    return this.radious;
+  }
+
 
   @Override
   public boolean collided(ICollidable c) {
@@ -131,12 +135,12 @@ public class CannonBall implements IMovable, ICollidable{
   }
 
   @Override
-  public PVector getVelocity() {
-    return null;
+  public void setPosition(PVector position) {
+    this.position = position;
   }
 
   @Override
-  public PVector getRadius() {
+  public PVector getVelocity() {
     return null;
   }
 
