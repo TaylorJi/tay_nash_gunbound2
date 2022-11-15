@@ -2,8 +2,8 @@ import processing.core.PFont;
 import processing.core.PVector;
 public class Player extends AbstractPlayer implements ICollidable, IMovable {
   protected int fillColour = 100;
-  protected float width = 30.0F;
-  protected float height = 30.0F;
+  protected int width = 30;
+  protected int height = 30;
 
   protected int hp = 100;
 
@@ -15,7 +15,16 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   @Override
   public void move(int direction) {
-    PVector temp = new PVector(getPosition().x + direction, getPosition().y);
+    float xPos = getPosition().x;
+    float yPos = getPosition().y;
+    if ((xPos + direction <= 0) || (xPos + this.width + direction >= window.width)) {
+      xPos = getPosition().x;
+    } else {
+      xPos = getPosition().x + direction;
+    }
+
+//    PVector temp = new PVector(getPosition().x + direction, getPosition().y);
+    PVector temp = new PVector(xPos, yPos);
     this.setPosition(temp);
   }
 
@@ -45,8 +54,18 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
+  public void setHp(int hp) {
+    this.hp -= hp;
+  }
+
+  @Override
   public int getFuel() {
     return this.fuel;
+  }
+
+  @Override
+  public void setFuel(int fuel) {
+    this.fuel -= fuel;
   }
 
   @Override
@@ -87,12 +106,12 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   @Override
   public float getWidth() {
-    return 0;
+    return this.width;
   }
 
   @Override
   public float getHeight() {
-    return 0;
+    return this.height;
   }
 
   @Override

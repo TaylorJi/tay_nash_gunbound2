@@ -16,7 +16,9 @@ abstract public class AbstractPlayer {
   public abstract void fire();
   public abstract void collide();
   public abstract int getHp();
+  public abstract void setHp(int hp);
   public abstract int getFuel();
+  public abstract void setFuel(int fuel);
   public abstract void setPosition(PVector position);
   public abstract PVector getPosition();
 

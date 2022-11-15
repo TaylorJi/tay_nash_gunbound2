@@ -17,6 +17,7 @@ public class Window extends PApplet{
   // turn = false means player1's turn.
   // turn = true means player1's turn.
   protected boolean turn = false;
+//  protected boolean turn = true;
 
   PFont font;
 
@@ -74,30 +75,33 @@ public class Window extends PApplet{
   @Override
   public void keyPressed(KeyEvent event) {
     super.keyPressed(event);
-    Player CurrentPlayer;
+    Player currentPlayer;
     if (!this.turn) {
-      CurrentPlayer = leftPlayer;
+      currentPlayer = leftPlayer;
     } else {
-      CurrentPlayer = rightPlayer;
+      currentPlayer = rightPlayer;
     }
 
-    if (CurrentPlayer == null) {
+    if ((currentPlayer == null) || (currentPlayer.fuel == 0)){
       return;
     }
+
     switch (event.getKeyCode()) {
       case RIGHT:
-        CurrentPlayer.move(10);
+        currentPlayer.move(10);
+        currentPlayer.setFuel(10);
         break;
       case LEFT:
-        CurrentPlayer.move(-10);
+        currentPlayer.move(-10);
+        currentPlayer.setFuel(10);
         break;
       default:
         break;
     }
     if (!this.turn) {
-      leftPlayer = CurrentPlayer;
+      leftPlayer = currentPlayer;
     } else {
-      rightPlayer = CurrentPlayer;
+      rightPlayer = currentPlayer;
     }
   }
 
