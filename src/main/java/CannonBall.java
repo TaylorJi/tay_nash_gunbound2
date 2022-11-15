@@ -31,10 +31,11 @@ public class CannonBall {
 
 
   public boolean outOfBounds(Window window) {
-    if ((this.position.x >= window.width
-            || this.position.x <= 0)
-            || (this.position.y >= window.height
-            || this.position.y <= 0)) {
+
+    if ((this.position.x > window.width
+            || this.position.x < 0)
+            || (this.position.y < 0
+            || this.position.y >= window.dashboardHeight)) {
       return true;
     } else {
       return false;
@@ -56,7 +57,8 @@ public class CannonBall {
 
     this.position = this.position.add(this.direction.mult(speed));
     if (outOfBounds(window)) {
-      draw(window);
+      System.out.println(this.position.x + " " + this.position.y);
+      bounce((float)Math.PI / 4f);
     }
 
   }

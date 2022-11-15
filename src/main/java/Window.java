@@ -27,8 +27,8 @@ public class Window extends PApplet{
 
   public void draw() {
     background(10);
-    ball.move(this);
     ball.draw(this);
+    ball.move(this);
     leftPlayer.draw(this);
     rightPlayer.draw(this);
     drawDashboard();
