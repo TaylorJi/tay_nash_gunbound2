@@ -83,6 +83,7 @@ public class Window extends PApplet{
     this.rect(this.width - 240, this.height - 40, rightPlayer.getFuel(), 10);
   }
 
+
   public void settings() {
     size(this.width, this.height);
     img = loadImage("title.jpg");
