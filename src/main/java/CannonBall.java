@@ -26,9 +26,9 @@ public class CannonBall {
   }
 
 
-  public boolean isHit() {
-    // if the cannonball hits, obstacle the move to the next turn
-    // if the cannonball hits the other opponent, then loses the opponent's hp
+  public boolean isHitPlayer(Player player, Window window) {
+    // if the cannonball hits the other opponent, then loses the opponent's hp, and ends turn
+    // if not, ends the turn
     return false;
   }
 
