@@ -64,7 +64,7 @@ public class CannonBall implements IMovable, ICollidable{
 
 
   public void removeBall (CannonBall this) {
-    this.draw(window);
+    this.draw(getPosition(), window);
   }
 
   public void bounce(float b) {
@@ -88,10 +88,10 @@ public class CannonBall implements IMovable, ICollidable{
 
   }
 
-  public void draw(Window window) {
+  public void draw(PVector position, Window window) {
     window.fill(this.fillColour);
-    window.ellipse(this.position.x,
-            this.position.y,
+    window.ellipse(position.x,
+            position.y,
             this.width,
             this.height);
   }

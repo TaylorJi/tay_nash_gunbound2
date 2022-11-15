@@ -19,7 +19,7 @@ public class Window extends PApplet{
   protected int height = 720;
 
   // turn = false means player1's turn.
-  // turn = true means player1's turn.
+  // turn = true means player2's turn.
   protected boolean turn = false;
 //  protected boolean turn = true;
   protected boolean title = true;
@@ -35,10 +35,16 @@ public class Window extends PApplet{
 //    if (this.title) {
 //      showTitle();
 //    }
+    Player currentPlayer;
+    if (!this.turn) {
+      currentPlayer = leftPlayer;
+    } else {
+      currentPlayer = rightPlayer;
+    }
     background(10);
     leftPlayer.draw(this);
     rightPlayer.draw(this);
-    ball.draw(this);
+    ball.draw(currentPlayer.position, this);
     ball.move(this);
 
     drawDashboard();
@@ -58,9 +64,9 @@ public class Window extends PApplet{
 
     public void drawDashboard() {
     textSize(20);
+    fill(8, 190, 27);
+    rect(0, dashboardHeight, this.width, 2);
     fill(3, 253, 247);
-    line(0, dashboardHeight, this.width, dashboardHeight); // if the border is this.height - 120, then overlap the player name
-//    stroke(200);
     text("Player1", 50, this.height - 100);
     text("Player2", this.width - 300, this.height - 100);
     textSize(18);
