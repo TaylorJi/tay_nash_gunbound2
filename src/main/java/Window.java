@@ -18,6 +18,8 @@ public class Window extends PApplet{
   protected int width = 1280;
   protected int height = 720;
 
+  protected int dashboardHeight = this.height - 130;
+
   PFont font;
 
   private Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
@@ -38,8 +40,8 @@ public class Window extends PApplet{
   public void drawDashboard() {
     textSize(20);
     fill(3, 253, 247);
-    line(0, this.height - 120, this.width, this.height - 120); // if the border is this.height - 120, then overlap the player name
-    stroke(126);
+    line(0, dashboardHeight, this.width, dashboardHeight); // if the border is this.height - 120, then overlap the player name
+    stroke(200);
     text("Player1", 50, this.height - 100);
     text("Player2", this.width - 300, this.height - 100);
     textSize(18);
