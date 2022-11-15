@@ -38,6 +38,8 @@ public class Window extends PApplet{
   public void drawDashboard() {
     textSize(20);
     fill(3, 253, 247);
+    line(0, this.height - 120, this.width, this.height - 120); // if the border is this.height - 120, then overlap the player name
+    stroke(126);
     text("Player1", 50, this.height - 100);
     text("Player2", this.width - 300, this.height - 100);
     textSize(18);
