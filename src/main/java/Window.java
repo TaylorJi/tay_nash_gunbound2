@@ -12,8 +12,10 @@ public class Window extends PApplet{
 
   private CannonBall ball = new CannonBall( tempPos, tempDir,this);
 
-  private int width = 1280;
-  private int height = 720;
+//  private int width = 1280;
+  protected int width = 1280;
+//  private int height = 720;
+  protected int height = 720;
 
   PFont font;
 
