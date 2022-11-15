@@ -10,6 +10,7 @@ import processing.core.PVector;
  */
 public interface IMovable {
   PVector getPosition();
+  void setPosition(PVector position);
   PVector getVelocity();
   PVector getRadius();
   PVector getPower();

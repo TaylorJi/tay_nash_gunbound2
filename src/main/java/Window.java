@@ -9,10 +9,10 @@ import java.util.concurrent.TimeUnit;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
-  private PVector tempPos = new PVector(2f, 2f);
-  private PVector tempDir = new PVector(1f, 1f);
+  protected PVector tempPos = new PVector(2f, 2f);
+  protected PVector tempDir = new PVector(1f, 1f);
 
-  private CannonBall ball = new CannonBall( tempPos, tempDir,this);
+  protected CannonBall ball = new CannonBall(tempPos, tempDir,this);
   protected int width = 1280;
   protected int height = 720;
 
@@ -23,8 +23,8 @@ public class Window extends PApplet{
   protected boolean title = true;
   PImage img;
 
-  private Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
-  private Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
+  protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
+  protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
 
   public void draw() {
     if (this.title) {
