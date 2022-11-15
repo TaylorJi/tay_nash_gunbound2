@@ -50,6 +50,7 @@ public class CannonBall {
   public void move(Window window) {
     //this method will be implemented from IMovable interface
     // cannonball moves toward in certain direction
+
     this.position = this.position.add(this.direction.mult(speed));
     if (outOfBounds(window)) {
       bounce((float) Math.PI / 4f);

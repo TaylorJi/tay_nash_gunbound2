@@ -1,9 +1,16 @@
 import processing.core.PApplet;
+import processing.core.PVector;
+
 public class Window extends PApplet{
-  private CannonBall ball = new CannonBall((float) 30, (float) 30, this);
+  // create tempPos and tempDir for now
+  private PVector tempPos = new PVector(2f, 2f);
+  private PVector tempDir = new PVector(1f, 1f);
+
+  private CannonBall ball = new CannonBall( tempPos, tempDir,this);
 
   public void draw() {
     background(10);
+    ball.move(this);
     ball.draw(this);
   }
 
