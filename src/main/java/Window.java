@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
-  protected PVector tempPos = new PVector(50, this.height + 500);
+  protected PVector tempPos = new PVector(50, this.height + 100);
   protected PVector tempDir = new PVector(1f, 1f).normalize();
 
   protected CannonBall ball = new CannonBall(tempPos, tempDir,this);

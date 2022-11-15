@@ -10,9 +10,9 @@ public class CannonBall implements IMovable, ICollidable{
   Window window;
   protected float speed = 0;
 
-  protected float width = (float) 30;
+  protected float width = (float) 20;
 
-  protected float height = (float) 30;
+  protected float height = (float) 20;
 
   protected float radious = (float) 30 / 2;
 
@@ -90,8 +90,8 @@ public class CannonBall implements IMovable, ICollidable{
 
   public void draw(PVector position, Window window) {
     window.fill(this.fillColour);
-    window.ellipse(position.x,
-            position.y,
+    window.ellipse(position.x + this.getRadius(),
+            position.y - this.radious,
             this.width,
             this.height);
   }
