@@ -160,6 +160,9 @@ public class Window extends PApplet{
     }
 
     if ((currentPlayer == null) || (currentPlayer.fuel == 0)){
+      if(event.getKeyCode() == ENTER) {
+        currentPlayer.fire(currentPlayer);
+      }
       return;
     }
     switch (event.getKeyCode()) {
