@@ -1,7 +1,5 @@
 import processing.core.PVector;
 
-import java.util.Date;
-
 abstract public class AbstractPlayer {
   protected PVector position;
   protected Window window;
@@ -18,7 +16,7 @@ abstract public class AbstractPlayer {
   public abstract int getHp();
   public abstract void setHp(int hp);
   public abstract int getFuel();
-  public abstract void setFuel(int fuel);
+  public abstract void decreaseFuel(int fuel);
   public abstract void setPosition(PVector position);
   public abstract PVector getPosition();
 

@@ -1,5 +1,8 @@
 import processing.core.PFont;
 import processing.core.PVector;
+
+import static java.lang.Math.atan;
+
 public class Player extends AbstractPlayer implements ICollidable, IMovable {
   protected int fillColour = 100;
   protected int width = 30;
@@ -8,6 +11,8 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   protected int hp = 100;
 
   protected int fuel = 100;
+
+  protected PVector angleDirection = new PVector(3,1).normalize();
 
   public Player(PVector position, Window window) {
     super(position, window);
@@ -62,8 +67,23 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
-  public void setFuel(int fuel) {
+  public void decreaseFuel(int fuel) {
     this.fuel -= fuel;
+    if (this.fuel <= 0) this.fuel = 0;
+  }
+
+  public void setAngleDirection(double degree) {
+    if ((getAngle(this.angleDirection.x + degree, this.angleDirection.y - degree) > 0.9)
+            || (getAngle(this.angleDirection.x + degree, this.angleDirection.y - degree) < 0)) {
+      return;
+    } else {
+      this.angleDirection.x += degree;
+      this.angleDirection.y -= degree;
+    }
+  }
+
+  double getAngle(double x, double y) {
+    return atan((float)y/(float)x);
   }
 
   @Override
@@ -91,7 +111,6 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public PVector getVelocity() {
     return null;
   }
-
 
   @Override
   public PVector getPower() {

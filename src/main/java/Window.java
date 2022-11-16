@@ -4,10 +4,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
-import java.awt.*;
 import java.util.concurrent.TimeUnit;
-
-import java.util.ArrayList;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
@@ -19,7 +16,6 @@ public class Window extends PApplet{
   protected PVector tempDir = new PVector(1f, 1f).normalize();
 
   protected CannonBall ball = new CannonBall(tempPos, tempDir,this);
-  protected PVector angleDirection = new PVector(3,1).normalize();
   protected int width = 1280;
   protected int height = 720;
 
@@ -54,7 +50,7 @@ public class Window extends PApplet{
     rightPlayer.draw(this);
     ball.draw(currentPlayer.position, this);
     ball.move(this);
-    drawAngle(currentPlayer, angleDirection);
+    drawAngle(currentPlayer, currentPlayer.angleDirection);
     drawDashboard();
     drawHp();
     drawFuel();
@@ -116,24 +112,6 @@ public class Window extends PApplet{
     this.stroke(0);
   }
 
-  public void setAngleDirection(double degree) {
-    PVector direction = new PVector(this.angleDirection.x,
-                      this.angleDirection.y);
-//    PVector direction = new PVector(this.angleDirection.x + (float)degree,
-//            this.angleDirection.y - (float)degree).normalize();
-    if ((getAngle(this.angleDirection.x + degree, this.angleDirection.y - degree) > 0.9)
-      || (getAngle(this.angleDirection.x + degree, this.angleDirection.y - degree) < 0)) {
-      return;
-    } else {
-      this.angleDirection.x += degree;
-      this.angleDirection.y -= degree;
-    }
-  }
-
-  double getAngle(double x, double y) {
-    return atan((float)y/(float)x);
-  }
-
   public void settings() {
     size(this.width, this.height);
     img = loadImage("title.jpg");
@@ -154,17 +132,19 @@ public class Window extends PApplet{
     switch (event.getKeyCode()) {
       case RIGHT:
         currentPlayer.move(10);
-        currentPlayer.setFuel(10);
+        currentPlayer.decreaseFuel(5);
         break;
       case LEFT:
         currentPlayer.move(-10);
-        currentPlayer.setFuel(10);
+        currentPlayer.decreaseFuel(5);
         break;
       case UP:
-        setAngleDirection(-0.01);
+        currentPlayer.setAngleDirection(-0.01);
+        currentPlayer.decreaseFuel(1);
         break;
       case DOWN:
-        setAngleDirection(0.01);
+        currentPlayer.setAngleDirection(0.01);
+        currentPlayer.decreaseFuel(1);
         break;
       default:
         break;
