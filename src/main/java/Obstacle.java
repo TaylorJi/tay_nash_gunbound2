@@ -21,7 +21,8 @@ public class Obstacle implements ICollidable {
 //        window.rect(100, 100, 20, 20);
         break;
       case CIRCLE:
-//        window.
+        window.fill(100,115,150);
+        window.ellipse(position.x, position.y, 30, 30);
         break;
       case RECT:
         break;

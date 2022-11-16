@@ -35,6 +35,7 @@ public class Window extends PApplet{
   protected PVector wallPosition = new PVector(this.width / 2, this.dashboardHeight);
   protected Obstacle wall = new Obstacle(1,false);
   protected Obstacle obstacle = new Obstacle(10, true);
+  PVector circleVector = new PVector(random(this.height), random(this.width));
 
   public void draw() {
 //    if (this.title) {
@@ -56,6 +57,7 @@ public class Window extends PApplet{
     drawHp();
     drawFuel();
     wall.draw(WALL, wallPosition,this);
+    obstacle.draw(CIRCLE, circleVector,this);
   }
 
   public void showTitle() {
@@ -162,20 +164,20 @@ public class Window extends PApplet{
     }
     switch (event.getKeyCode()) {
       case RIGHT:
-        currentPlayer.move(10);
+        currentPlayer.move(5);
         currentPlayer.decreaseFuel(2);
         break;
       case LEFT:
-        currentPlayer.move(-10);
+        currentPlayer.move(-5);
         currentPlayer.decreaseFuel(2);
         break;
       case UP:
-        currentPlayer.setAngle(currentPlayer, 0.01F);
-        currentPlayer.decreaseFuel(0.25F);
+        currentPlayer.setAngle(currentPlayer, 0.005F);
+        currentPlayer.decreaseFuel(0.1F);
         break;
       case DOWN:
-        currentPlayer.setAngle(currentPlayer, -0.01F);
-        currentPlayer.decreaseFuel(0.25F);
+        currentPlayer.setAngle(currentPlayer, -0.005F);
+        currentPlayer.decreaseFuel(0.1F);
         break;
       case ENTER:
         currentPlayer.fire(currentPlayer);
