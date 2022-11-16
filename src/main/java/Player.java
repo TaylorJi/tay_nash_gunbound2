@@ -1,7 +1,7 @@
-import processing.core.PFont;
 import processing.core.PVector;
 
 import static java.lang.Math.atan;
+import static processing.core.PApplet.println;
 
 public class Player extends AbstractPlayer implements ICollidable, IMovable {
   protected int fillColour = 100;
@@ -10,9 +10,9 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   protected int hp = 100;
 
-  protected int fuel = 100;
+  protected float fuel = 100.0F;
 
-  protected PVector angleDirection = new PVector(3,1).normalize();
+  protected PVector angleDirection = new PVector(1,1).normalize();
 
   public Player(PVector position, Window window) {
     super(position, window);
@@ -32,18 +32,15 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
-  public void setAngle() {
-
-  }
-
-  @Override
   public void setPower() {
 
   }
 
   @Override
-  public void fire() {
-
+  public void fire(Player currentPlayer) {
+    println("Fired!");
+    currentPlayer.setFuel(100.0F);
+    window.turn = !window.turn;
   }
 
   @Override
@@ -62,24 +59,31 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
-  public int getFuel() {
+  public float getFuel() {
     return this.fuel;
   }
 
   @Override
-  public void decreaseFuel(int fuel) {
+  public void setFuel(float fuel) {
+    this.fuel = fuel;
+  }
+
+  @Override
+  public void decreaseFuel(float fuel) {
     this.fuel -= fuel;
     if (this.fuel <= 0) this.fuel = 0;
   }
 
-  public void setAngleDirection(double degree) {
-    if ((getAngle(this.angleDirection.x + degree, this.angleDirection.y - degree) > 0.9)
-            || (getAngle(this.angleDirection.x + degree, this.angleDirection.y - degree) < 0)) {
+  @Override
+  public void setAngle(Player currentPlayer, double degree) {
+    if ((getAngle(currentPlayer.angleDirection.x + degree, currentPlayer.angleDirection.y - degree) > 0.9)
+            || (getAngle(currentPlayer.angleDirection.x + degree, currentPlayer.angleDirection.y - degree) < 0)) {
       return;
     } else {
-      this.angleDirection.x += degree;
-      this.angleDirection.y -= degree;
+      currentPlayer.angleDirection.x += degree;
+      currentPlayer.angleDirection.y -= degree;
     }
+    println(this.getAngle(currentPlayer.angleDirection.x, currentPlayer.angleDirection.y));
   }
 
   double getAngle(double x, double y) {
