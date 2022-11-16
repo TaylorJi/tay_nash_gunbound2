@@ -11,6 +11,10 @@ import java.util.ArrayList;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
+  protected static final int WALL = 1;
+  protected static final int CIRCLE = 2;
+  protected static final int RECT = 3;
+
   protected PVector tempPos = new PVector(50, this.height + 500);
   protected PVector tempDir = new PVector(1f, 1f).normalize();
 
@@ -31,7 +35,9 @@ public class Window extends PApplet{
 
   protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
+  protected PVector wallPosition = new PVector(this.width / 2, this.dashboardHeight);
   protected Obstacle wall = new Obstacle(1,false);
+  protected Obstacle obstacle = new Obstacle(10, true);
 
   public void draw() {
 //    if (this.title) {
@@ -52,7 +58,7 @@ public class Window extends PApplet{
     drawDashboard();
     drawHp();
     drawFuel();
-    wall.draw(this);
+    wall.draw(WALL, wallPosition,this);
   }
 
   public void showTitle() {

@@ -1,6 +1,10 @@
 import processing.core.PVector;
 
 public class Obstacle implements ICollidable {
+  protected static final int WALL = 1;
+  protected static final int CIRCLE = 2;
+  protected static final int RECT = 3;
+
   protected boolean isBreakable = false;
   protected int numberOfObstacles = 0;
 
@@ -9,9 +13,23 @@ public class Obstacle implements ICollidable {
     this.isBreakable = isBreakable;
   }
 
-  public void draw(Window window) {
-    window.fill(118, 113, 113);
-    window.rect(window.width / 2, window.dashboardHeight, 20, -window.height / 4);
+  public void draw(int type, PVector position, Window window) {
+    switch (type) {
+      case WALL:
+        window.fill(118, 113, 113);
+        window.rect(position.x, position.y, 20, -window.height / 4);
+//        window.rect(100, 100, 20, 20);
+        break;
+      case CIRCLE:
+//        window.
+        break;
+      case RECT:
+        break;
+      default:
+        break;
+    }
+//    window.fill(118, 113, 113);
+//    window.rect(window.width / 2, window.dashboardHeight, 20, -window.height / 4);
   }
   @Override
   public boolean collided(ICollidable c) {
