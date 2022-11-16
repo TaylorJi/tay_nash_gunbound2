@@ -31,6 +31,7 @@ public class Window extends PApplet{
 
   protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
+  protected Obstacle wall = new Obstacle(1,false);
 
   public void draw() {
 //    if (this.title) {
@@ -51,6 +52,7 @@ public class Window extends PApplet{
     drawDashboard();
     drawHp();
     drawFuel();
+    wall.draw(this);
   }
 
   public void showTitle() {
