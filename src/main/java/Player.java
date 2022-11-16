@@ -1,5 +1,6 @@
 import processing.core.PVector;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.atan;
 import static processing.core.PApplet.println;
 
@@ -75,19 +76,29 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
-  public void setAngle(Player currentPlayer, double degree) {
-    if ((getAngle(currentPlayer.angleDirection.x + degree, currentPlayer.angleDirection.y - degree) > 0.9)
-            || (getAngle(currentPlayer.angleDirection.x + degree, currentPlayer.angleDirection.y - degree) < 0)) {
-      return;
-    } else {
-      currentPlayer.angleDirection.x += degree;
-      currentPlayer.angleDirection.y -= degree;
-    }
-    println(this.getAngle(currentPlayer.angleDirection.x, currentPlayer.angleDirection.y));
+  public void setAngle(Player currentPlayer, float degree) {
+//    Player player = new Player(currentPlayer.angleDirection, window);
+//    player.angleDirection.rotate(degree);
+//    if (!window.turn) {
+//      if ((getAngle(abs(player.angleDirection.x), abs(player.angleDirection.y)) > 0.9)
+//              || (getAngle(abs(player.angleDirection.x), abs(player.angleDirection.y)) < 0)) {
+//        return;
+//      }
+//    }
+
+//    println(getAngle(abs(player.angleDirection.x), abs(player.angleDirection.y)));
+//    } else {
+//      currentPlayer.angleDirection.x += degree;
+//      currentPlayer.angleDirection.y -= degree;
+//    }
+//    println(this.getAngle(currentPlayer.angleDirection.x, currentPlayer.angleDirection.y));
+
+    currentPlayer.angleDirection.rotate(degree);
+//    println(getAngle(currentPlayer.angleDirection.x, currentPlayer.angleDirection.y));
   }
 
-  double getAngle(double x, double y) {
-    return atan((float)y/(float)x);
+  double getAngle(float x, float y) {
+    return atan(y/x);
   }
 
   @Override

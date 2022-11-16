@@ -9,7 +9,7 @@ abstract public class AbstractPlayer {
   private String name;
 
   public abstract void move(int direction);
-  public abstract void setAngle(Player currentPlayer, double degree);
+  public abstract void setAngle(Player currentPlayer, float degree);
   public abstract void setPower();
   public abstract void fire(Player currentPlayer);
   public abstract void collide();

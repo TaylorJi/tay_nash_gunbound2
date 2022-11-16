@@ -51,11 +51,7 @@ public class Window extends PApplet{
     rightPlayer.draw(this);
     ball.draw(currentPlayer.position, this);
     ball.move(this);
-    if (!this.turn) {
-      drawAngle(currentPlayer, currentPlayer.angleDirection);
-    } else {
-      drawAngle(currentPlayer, currentPlayer.angleDirection);
-    }
+    drawAngle(currentPlayer, currentPlayer.angleDirection);
     drawDashboard();
     drawHp();
     drawFuel();
@@ -142,8 +138,7 @@ public class Window extends PApplet{
     if (!this.turn) {
       this.line(xPos + player.width, yPos, xPos + (angleDirection.x) * 50, yPos - (angleDirection.y) * 50);
     } else {
-//      this.line(xPos + player.width, yPos, xPos + (angleDirection.x) * 50, yPos - (angleDirection.y) * 50);
-      this.line(xPos, yPos, xPos - (angleDirection.x) * 50, yPos - (angleDirection.y) * 50);
+      this.line(xPos, yPos, xPos - angleDirection.x * 40, yPos - angleDirection.y * 40);
     }
     this.stroke(0);
   }
@@ -175,11 +170,11 @@ public class Window extends PApplet{
         currentPlayer.decreaseFuel(2);
         break;
       case UP:
-        currentPlayer.setAngle(currentPlayer, -0.01);
+        currentPlayer.setAngle(currentPlayer, 0.01F);
         currentPlayer.decreaseFuel(0.25F);
         break;
       case DOWN:
-        currentPlayer.setAngle(currentPlayer, 0.01);
+        currentPlayer.setAngle(currentPlayer, -0.01F);
         currentPlayer.decreaseFuel(0.25F);
         break;
       case ENTER:
