@@ -186,5 +186,10 @@ public class Window extends PApplet{
     String[] processingArgs = {"processingWindow"};
     Window processingWindow = new Window();
     PApplet.runSketch(processingArgs, processingWindow);
+
+    Window obj = new Window();
+    OnEventListner mListner = new EventHandler();
+    obj.registerOnEventListner(mListner);
+    obj.doStuff();
   }
 }
