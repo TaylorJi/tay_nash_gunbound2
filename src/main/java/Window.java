@@ -87,6 +87,25 @@ public class Window extends PApplet{
       this.obstacleSize = 10;
       obstacle.get(i).draw(RECT, obstacleVector.get(i),obstacleSize ,this);
     }
+    if ((leftPlayer.getHp() == 0) || (rightPlayer.getHp() == 0)) {
+      gameOver();
+    }
+  }
+
+  public void gameOver() {
+    if (leftPlayer.getHp() == 0) {
+      textSize(100);
+      rect(200, this.height - 500, 900, this.height - 500);
+      fill(3, 253, 247);
+      text("Player2 won!", 200, this.height - 400);
+      text("Press TAB key to quit.", 200, this.height - 300);
+    } else if (rightPlayer.getHp() == 0) {
+      textSize(100);
+      rect(200, this.height - 500, 900, this.height - 500);
+      fill(3, 253, 247);
+      text("Player1 won!", 200, this.height - 400);
+      text("Press TAB key to quit.", 200, this.height - 300);
+    }
   }
 
   public void showTitle() {
@@ -270,6 +289,13 @@ public class Window extends PApplet{
         break;
       case ENTER:
         currentPlayer.fire(currentPlayer, this);
+        break;
+      case BACKSPACE:
+        currentPlayer.setHp(10);
+        break;
+      case TAB:
+        exit();
+
       default:
         break;
     }
