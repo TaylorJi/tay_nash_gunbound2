@@ -38,10 +38,13 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
-  public void fire(Player currentPlayer) {
-    println("Fired!");
+  public void fire(Player currentPlayer, Window window) {
+    Window obj = new Window();
+    OnEventListner mListner = new EventHandler();
+    obj.registerOnEventListner(mListner);
     currentPlayer.setFuel(100.0F);
     window.turn = !window.turn;
+    obj.afterFire();
   }
 
   @Override
@@ -77,24 +80,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   @Override
   public void setAngle(Player currentPlayer, float degree) {
-//    Player player = new Player(currentPlayer.angleDirection, window);
-//    player.angleDirection.rotate(degree);
-//    if (!window.turn) {
-//      if ((getAngle(abs(player.angleDirection.x), abs(player.angleDirection.y)) > 0.9)
-//              || (getAngle(abs(player.angleDirection.x), abs(player.angleDirection.y)) < 0)) {
-//        return;
-//      }
-//    }
-
-//    println(getAngle(abs(player.angleDirection.x), abs(player.angleDirection.y)));
-//    } else {
-//      currentPlayer.angleDirection.x += degree;
-//      currentPlayer.angleDirection.y -= degree;
-//    }
-//    println(this.getAngle(currentPlayer.angleDirection.x, currentPlayer.angleDirection.y));
-
     currentPlayer.angleDirection.rotate(degree);
-//    println(getAngle(currentPlayer.angleDirection.x, currentPlayer.angleDirection.y));
   }
 
   double getAngle(float x, float y) {

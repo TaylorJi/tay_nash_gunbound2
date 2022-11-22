@@ -43,8 +43,8 @@ public class Window extends PApplet{
     this.mListner = mListner;
   }
 
-  public void doStuff() {
-    System.out.println("Performing callback before synchronous Task");
+  public void afterFire() {
+    System.out.println("Fire button pushed!");
 
     if(this.mListner != null) {
       mListner.onEvent();
@@ -175,7 +175,7 @@ public class Window extends PApplet{
 
     if ((currentPlayer == null) || (currentPlayer.fuel == 0)){
       if(event.getKeyCode() == ENTER) {
-        currentPlayer.fire(currentPlayer);
+        currentPlayer.fire(currentPlayer, this);
       }
       return;
     }
@@ -197,7 +197,7 @@ public class Window extends PApplet{
         currentPlayer.decreaseFuel(0.1F);
         break;
       case ENTER:
-        currentPlayer.fire(currentPlayer);
+        currentPlayer.fire(currentPlayer, this);
       default:
         break;
     }
@@ -207,10 +207,5 @@ public class Window extends PApplet{
     String[] processingArgs = {"processingWindow"};
     Window processingWindow = new Window();
     PApplet.runSketch(processingArgs, processingWindow);
-
-    Window obj = new Window();
-    OnEventListner mListner = new EventHandler();
-    obj.registerOnEventListner(mListner);
-    obj.doStuff();
   }
 }
