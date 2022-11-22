@@ -32,6 +32,20 @@ public class Window extends PApplet{
   protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
 
+  private OnEventListner mListner;
+
+  public void registerOnEventListner(OnEventListner mListner) {
+    this.mListner = mListner;
+  }
+
+  public void doStuff() {
+    System.out.println("Performing callback before synchronous Task");
+
+    if(this.mListner != null) {
+      mListner.onEvent();
+    }
+  }
+
   public void draw() {
 //    if (this.title) {
 //      showTitle();
