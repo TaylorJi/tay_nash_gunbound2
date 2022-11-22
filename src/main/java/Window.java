@@ -134,9 +134,33 @@ public class Window extends PApplet{
       text("Fire the cannon ball by ENTER key",this.width - 800 ,this.height - 20 );
     }
 
+    if (currentPlayer.getHp() < 30) {
+      fill(255, 80, 1);
+      if (!this.turn) {
+        text("Warning! low HP!", 200, this.height - 50);
+      } else {
+        text("Warning! low HP!", this.width - 500, this.height - 50);
+      }
+    }
 
+    if (currentPlayer.getFuel() == 0) {
+      fill(255, 80, 1);
+      if (!this.turn) {
+        text("Fuel is empty!", 100, this.height - 30);
+        text("Press ENTER to turn over.", 100, this.height - 10);
+      } else {
+        text("Fuel is empty!", this.width - 250, this.height - 30);
+        text("Press ENTER to turn over.", this.width - 250, this.height - 10);
+      }
+    } else if (currentPlayer.getFuel() < 30) {
+      fill(255, 80, 1);
+      if (!this.turn) {
+        text("Warning! Fuel shortage.", 200, this.height - 30);
+      } else {
+        text("Warning! Fuel shortage.", this.width - 500, this.height - 30);
+      }
+    }
   }
-
 
   public void drawHp() {
     // for player1
