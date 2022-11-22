@@ -4,10 +4,8 @@ import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
-import java.awt.*;
-import java.util.concurrent.TimeUnit;
-
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
@@ -15,7 +13,7 @@ public class Window extends PApplet{
   protected static final int CIRCLE = 2;
   protected static final int RECT = 3;
 
-  protected PVector tempPos = new PVector(50, this.height + 100);
+  protected PVector tempPos = new PVector(50, this.height + 500);
   protected PVector tempDir = new PVector(1f, 1f).normalize();
 
   protected CannonBall ball = new CannonBall(tempPos, tempDir,this);
@@ -89,6 +87,25 @@ public class Window extends PApplet{
       this.obstacleSize = 10;
       obstacle.get(i).draw(RECT, obstacleVector.get(i),obstacleSize ,this);
     }
+    if ((leftPlayer.getHp() == 0) || (rightPlayer.getHp() == 0)) {
+      gameOver();
+    }
+  }
+
+  public void gameOver() {
+    if (leftPlayer.getHp() == 0) {
+      textSize(100);
+      rect(200, this.height - 500, 900, this.height - 500);
+      fill(3, 253, 247);
+      text("Player2 won!", 200, this.height - 400);
+      text("Press TAB key to quit.", 200, this.height - 300);
+    } else if (rightPlayer.getHp() == 0) {
+      textSize(100);
+      rect(200, this.height - 500, 900, this.height - 500);
+      fill(3, 253, 247);
+      text("Player1 won!", 200, this.height - 400);
+      text("Press TAB key to quit.", 200, this.height - 300);
+    }
   }
 
   public void showTitle() {
@@ -116,6 +133,52 @@ public class Window extends PApplet{
   // for player2
   text("HP", this.width - 300, this.height - 60);
   text("Fuel", this.width - 300, this.height - 30);
+  updateMsgBox();
+  }
+
+  void updateMsgBox() {
+    if (!this.turn) {
+      fill(206, 254, 238);
+      text("Player1's turn",this.width - 800 ,this.height - 80 );
+      fill(255, 255, 204);
+      text("Move your tank by ← → key",this.width - 800 ,this.height - 60 );
+      text("Set the angle with by ↑ ↓ key",this.width - 800 ,this.height - 40 );
+      text("Fire the cannon ball by ENTER key",this.width - 800 ,this.height - 20 );
+    } else {
+      fill(206, 254, 238);
+      text("Player2's turn",this.width - 800 ,this.height - 80 );
+      fill(255, 255, 204);
+      text("Move your tank by ← → key",this.width - 800 ,this.height - 60 );
+      text("Set the angle with by ↑ ↓ key",this.width - 800 ,this.height - 40 );
+      text("Fire the cannon ball by ENTER key",this.width - 800 ,this.height - 20 );
+    }
+
+    if (currentPlayer.getHp() < 30) {
+      fill(255, 80, 1);
+      if (!this.turn) {
+        text("Warning! low HP!", 200, this.height - 50);
+      } else {
+        text("Warning! low HP!", this.width - 500, this.height - 50);
+      }
+    }
+
+    if (currentPlayer.getFuel() == 0) {
+      fill(255, 80, 1);
+      if (!this.turn) {
+        text("Fuel is empty!", 100, this.height - 30);
+        text("Press ENTER to turn over.", 100, this.height - 10);
+      } else {
+        text("Fuel is empty!", this.width - 250, this.height - 30);
+        text("Press ENTER to turn over.", this.width - 250, this.height - 10);
+      }
+    } else if (currentPlayer.getFuel() < 30) {
+      fill(255, 80, 1);
+      if (!this.turn) {
+        text("Warning! Fuel shortage.", 200, this.height - 30);
+      } else {
+        text("Warning! Fuel shortage.", this.width - 500, this.height - 30);
+      }
+    }
   }
 
   public void drawHp() {
@@ -226,6 +289,13 @@ public class Window extends PApplet{
         break;
       case ENTER:
         currentPlayer.fire(currentPlayer, this);
+        break;
+      case BACKSPACE:
+        currentPlayer.setHp(10);
+        break;
+      case TAB:
+        exit();
+
       default:
         break;
     }
