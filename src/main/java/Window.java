@@ -4,8 +4,10 @@ import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
-import java.util.ArrayList;
+import java.awt.*;
 import java.util.concurrent.TimeUnit;
+
+import java.util.ArrayList;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
@@ -13,7 +15,7 @@ public class Window extends PApplet{
   protected static final int CIRCLE = 2;
   protected static final int RECT = 3;
 
-  protected PVector tempPos = new PVector(50, this.height + 500);
+  protected PVector tempPos = new PVector(50, this.height + 100);
   protected PVector tempDir = new PVector(1f, 1f).normalize();
 
   protected CannonBall ball = new CannonBall(tempPos, tempDir,this);
@@ -115,7 +117,6 @@ public class Window extends PApplet{
   text("HP", this.width - 300, this.height - 60);
   text("Fuel", this.width - 300, this.height - 30);
   }
-
 
   public void drawHp() {
     // for player1
