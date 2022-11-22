@@ -4,6 +4,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Window extends PApplet{
@@ -33,10 +34,15 @@ public class Window extends PApplet{
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
   protected Player currentPlayer;
   protected PVector wallPosition = new PVector(this.width / 2, this.dashboardHeight);
-  protected Obstacle wall = new Obstacle(1,false);
-  protected Obstacle obstacle = new Obstacle(10, true);
-  PVector circleVector = new PVector(random(this.height), random(this.width));
 
+  protected int numberOfObstacles = 20;
+  protected Obstacle wall = new Obstacle(1,false);
+//  protected Obstacle obstacle = new Obstacle(10, true);
+
+  protected ArrayList<Obstacle> obstacle = new ArrayList<>();
+//  PVector circleVector = new PVector(random(this.height), random(this.width));
+
+  protected ArrayList<PVector> obstacleVector = new ArrayList<>();
   private OnEventListner mListner;
 
   public void registerOnEventListner(OnEventListner mListner) {
@@ -71,7 +77,10 @@ public class Window extends PApplet{
     drawHp();
     drawFuel();
     wall.draw(WALL, wallPosition,this);
-    obstacle.draw(CIRCLE, circleVector,this);
+    for (int i = 0; i <numberOfObstacles; i++) {
+      obstacle.get(i).draw(CIRCLE, obstacleVector.get(i),this);
+    }
+//    obstacle.draw(CIRCLE, circleVector,this);
   }
 
   public void showTitle() {
@@ -162,6 +171,14 @@ public class Window extends PApplet{
   public void settings() {
     size(this.width, this.height);
     img = loadImage("title.jpg");
+
+    // Initialize obstacles
+    for (int i = 0; i < numberOfObstacles; i++) {
+      obstacle.add(new Obstacle(1,true));
+      obstacleVector.add(new PVector(random(height), random(width)));
+//      PVector obstacle = new PVector(random(width), random(height));
+    }
+
   }
   @Override
   public void keyPressed(KeyEvent event) {
