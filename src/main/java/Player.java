@@ -1,5 +1,9 @@
-import processing.core.PFont;
 import processing.core.PVector;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.atan;
+import static processing.core.PApplet.println;
+
 public class Player extends AbstractPlayer implements ICollidable, IMovable {
   protected int fillColour = 100;
   protected int width = 30;
@@ -7,7 +11,9 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   protected int hp = 100;
 
-  protected int fuel = 100;
+  protected float fuel = 100.0F;
+
+  protected PVector angleDirection = new PVector(1,1).normalize();
 
   public Player(PVector position, Window window) {
     super(position, window);
@@ -27,18 +33,15 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
-  public void setAngle() {
-
-  }
-
-  @Override
   public void setPower() {
 
   }
 
   @Override
-  public void fire() {
-
+  public void fire(Player currentPlayer) {
+    println("Fired!");
+    currentPlayer.setFuel(100.0F);
+    window.turn = !window.turn;
   }
 
   @Override
@@ -57,13 +60,45 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
-  public int getFuel() {
+  public float getFuel() {
     return this.fuel;
   }
 
   @Override
-  public void setFuel(int fuel) {
+  public void setFuel(float fuel) {
+    this.fuel = fuel;
+  }
+
+  @Override
+  public void decreaseFuel(float fuel) {
     this.fuel -= fuel;
+    if (this.fuel <= 0) this.fuel = 0;
+  }
+
+  @Override
+  public void setAngle(Player currentPlayer, float degree) {
+//    Player player = new Player(currentPlayer.angleDirection, window);
+//    player.angleDirection.rotate(degree);
+//    if (!window.turn) {
+//      if ((getAngle(abs(player.angleDirection.x), abs(player.angleDirection.y)) > 0.9)
+//              || (getAngle(abs(player.angleDirection.x), abs(player.angleDirection.y)) < 0)) {
+//        return;
+//      }
+//    }
+
+//    println(getAngle(abs(player.angleDirection.x), abs(player.angleDirection.y)));
+//    } else {
+//      currentPlayer.angleDirection.x += degree;
+//      currentPlayer.angleDirection.y -= degree;
+//    }
+//    println(this.getAngle(currentPlayer.angleDirection.x, currentPlayer.angleDirection.y));
+
+    currentPlayer.angleDirection.rotate(degree);
+//    println(getAngle(currentPlayer.angleDirection.x, currentPlayer.angleDirection.y));
+  }
+
+  double getAngle(float x, float y) {
+    return atan(y/x);
   }
 
   @Override
@@ -91,7 +126,6 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public PVector getVelocity() {
     return null;
   }
-
 
   @Override
   public PVector getPower() {

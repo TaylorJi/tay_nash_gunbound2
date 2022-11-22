@@ -4,18 +4,18 @@ import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
-import java.awt.*;
 import java.util.concurrent.TimeUnit;
-
-import java.util.ArrayList;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
+  protected static final int WALL = 1;
+  protected static final int CIRCLE = 2;
+  protected static final int RECT = 3;
+
   protected PVector tempPos = new PVector(50, this.height + 500);
   protected PVector tempDir = new PVector(1f, 1f).normalize();
 
   protected CannonBall ball = new CannonBall(tempPos, tempDir,this);
-  protected PVector angleDirection = new PVector(3,1).normalize();
   protected int width = 1280;
   protected int height = 720;
 
@@ -31,6 +31,11 @@ public class Window extends PApplet{
 
   protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
+  protected Player currentPlayer;
+  protected PVector wallPosition = new PVector(this.width / 2, this.dashboardHeight);
+  protected Obstacle wall = new Obstacle(1,false);
+  protected Obstacle obstacle = new Obstacle(10, true);
+  PVector circleVector = new PVector(random(this.height), random(this.width));
 
   private OnEventListner mListner;
 
@@ -50,7 +55,7 @@ public class Window extends PApplet{
 //    if (this.title) {
 //      showTitle();
 //    }
-    Player currentPlayer;
+//    Player currentPlayer;
     if (!this.turn) {
       currentPlayer = leftPlayer;
     } else {
@@ -61,10 +66,12 @@ public class Window extends PApplet{
     rightPlayer.draw(this);
     ball.draw(currentPlayer.position, this);
     ball.move(this);
-    drawAngle(currentPlayer, angleDirection);
+    drawAngle(currentPlayer, currentPlayer.angleDirection);
     drawDashboard();
     drawHp();
     drawFuel();
+    wall.draw(WALL, wallPosition,this);
+    obstacle.draw(CIRCLE, circleVector,this);
   }
 
   public void showTitle() {
@@ -96,19 +103,45 @@ public class Window extends PApplet{
 
   public void drawHp() {
     // for player1
-    this.fill(249, 227, 41);
+    if (leftPlayer.getHp() == 100) {
+      this.fill(0, 204, 0);
+    } else if ((leftPlayer.getFuel() < 100) && (leftPlayer.getFuel() >= 30)) {
+      this.fill(249, 227, 41);
+    } else if (leftPlayer.getFuel() < 30) {
+      this.fill(246, 0, 0);
+    }
     this.rect(100, this.height - 70, leftPlayer.getHp(), 10);
 
     // for player2
+    if (rightPlayer.getHp() == 100) {
+      this.fill(0, 204, 0);
+    } else if ((rightPlayer.getFuel() < 100) && (rightPlayer.getFuel() >= 30)) {
+      this.fill(249, 227, 41);
+    } else if (rightPlayer.getFuel() < 30) {
+      this.fill(246, 0, 0);
+    }
     this.rect(this.width - 240, this.height - 70, rightPlayer.getHp(), 10);
   }
 
   public void drawFuel() {
     // for player1
-    this.fill(164, 82, 0);
+    if (leftPlayer.getFuel() >= 70) {
+      this.fill(118, 59, 0);
+    } else if ((leftPlayer.getFuel() < 70) && (leftPlayer.getFuel() >= 30)) {
+      this.fill(164, 82, 0);
+    } else if (leftPlayer.getFuel() < 30) {
+      this.fill(246, 0, 0);
+    }
     this.rect(100, this.height - 40, leftPlayer.getFuel(), 10);
 
     // for player2
+    if (rightPlayer.getFuel() >= 70) {
+      this.fill(118, 59, 0);
+    } else if ((rightPlayer.getFuel() < 70) && (rightPlayer.getFuel() >= 30)) {
+      this.fill(164, 82, 0);
+    } else if (rightPlayer.getFuel() < 30) {
+      this.fill(246, 0, 0);
+    }
     this.rect(this.width - 240, this.height - 40, rightPlayer.getFuel(), 10);
   }
 
@@ -118,26 +151,12 @@ public class Window extends PApplet{
     xPos = player.getPosition().x;
     yPos = player.getPosition().y;
     this.stroke(255,179,179);
-    this.line(xPos + player.width, yPos, xPos + (angleDirection.x) * 50, yPos - (angleDirection.y) * 50);
-    this.stroke(0);
-  }
-
-  public void setAngleDirection(double degree) {
-    PVector direction = new PVector(this.angleDirection.x,
-                      this.angleDirection.y);
-//    PVector direction = new PVector(this.angleDirection.x + (float)degree,
-//            this.angleDirection.y - (float)degree).normalize();
-    if ((getAngle(this.angleDirection.x + degree, this.angleDirection.y - degree) > 0.9)
-      || (getAngle(this.angleDirection.x + degree, this.angleDirection.y - degree) < 0)) {
-      return;
+    if (!this.turn) {
+      this.line(xPos + player.width, yPos, xPos + (angleDirection.x) * 50, yPos - (angleDirection.y) * 50);
     } else {
-      this.angleDirection.x += degree;
-      this.angleDirection.y -= degree;
+      this.line(xPos, yPos, xPos - angleDirection.x * 40, yPos - angleDirection.y * 40);
     }
-  }
-
-  double getAngle(double x, double y) {
-    return atan((float)y/(float)x);
+    this.stroke(0);
   }
 
   public void settings() {
@@ -147,7 +166,7 @@ public class Window extends PApplet{
   @Override
   public void keyPressed(KeyEvent event) {
     super.keyPressed(event);
-    Player currentPlayer;
+//    Player currentPlayer;
     if (!this.turn) {
       currentPlayer = leftPlayer;
     } else {
@@ -155,30 +174,32 @@ public class Window extends PApplet{
     }
 
     if ((currentPlayer == null) || (currentPlayer.fuel == 0)){
+      if(event.getKeyCode() == ENTER) {
+        currentPlayer.fire(currentPlayer);
+      }
       return;
     }
     switch (event.getKeyCode()) {
       case RIGHT:
-        currentPlayer.move(10);
-        currentPlayer.setFuel(10);
+        currentPlayer.move(5);
+        currentPlayer.decreaseFuel(2);
         break;
       case LEFT:
-        currentPlayer.move(-10);
-        currentPlayer.setFuel(10);
+        currentPlayer.move(-5);
+        currentPlayer.decreaseFuel(2);
         break;
       case UP:
-        setAngleDirection(-0.01);
+        currentPlayer.setAngle(currentPlayer, 0.005F);
+        currentPlayer.decreaseFuel(0.1F);
         break;
       case DOWN:
-        setAngleDirection(0.01);
+        currentPlayer.setAngle(currentPlayer, -0.005F);
+        currentPlayer.decreaseFuel(0.1F);
         break;
+      case ENTER:
+        currentPlayer.fire(currentPlayer);
       default:
         break;
-    }
-    if (!this.turn) {
-      leftPlayer = currentPlayer;
-    } else {
-      rightPlayer = currentPlayer;
     }
   }
 
