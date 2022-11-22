@@ -35,7 +35,7 @@ public class Window extends PApplet{
   protected Player currentPlayer;
   protected PVector wallPosition = new PVector(this.width / 2, this.dashboardHeight);
 
-  protected int numberOfObstacles = 20;
+  protected int numberOfObstacles = 40;
   protected Obstacle wall = new Obstacle(1,false);
 //  protected Obstacle obstacle = new Obstacle(10, true);
 
@@ -44,6 +44,8 @@ public class Window extends PApplet{
 
   protected ArrayList<PVector> obstacleVector = new ArrayList<>();
   private OnEventListner mListner;
+
+  double obstacleSize;
 
   public void registerOnEventListner(OnEventListner mListner) {
     this.mListner = mListner;
@@ -76,11 +78,15 @@ public class Window extends PApplet{
     drawDashboard();
     drawHp();
     drawFuel();
-    wall.draw(WALL, wallPosition,this);
-    for (int i = 0; i <numberOfObstacles; i++) {
-      obstacle.get(i).draw(CIRCLE, obstacleVector.get(i),this);
+    wall.draw(WALL, wallPosition, obstacleSize, this);
+    for (int i = 0; i <numberOfObstacles / 2; i++) {
+      this.obstacleSize = 30;
+      obstacle.get(i).draw(CIRCLE, obstacleVector.get(i),obstacleSize ,this);
     }
-//    obstacle.draw(CIRCLE, circleVector,this);
+    for (int i = numberOfObstacles / 2; i <numberOfObstacles; i++) {
+      this.obstacleSize = 10;
+      obstacle.get(i).draw(RECT, obstacleVector.get(i),obstacleSize ,this);
+    }
   }
 
   public void showTitle() {
@@ -173,10 +179,13 @@ public class Window extends PApplet{
     img = loadImage("title.jpg");
 
     // Initialize obstacles
-    for (int i = 0; i < numberOfObstacles; i++) {
+    for (int i = 0; i < numberOfObstacles / 2; i++) {
       obstacle.add(new Obstacle(1,true));
-      obstacleVector.add(new PVector(random(height), random(width)));
-//      PVector obstacle = new PVector(random(width), random(height));
+      obstacleVector.add(new PVector(random(width), random(height - 250)));
+    }
+    for (int i = numberOfObstacles / 2; i < numberOfObstacles; i++) {
+      obstacle.add(new Obstacle(1,false));
+      obstacleVector.add(new PVector(random(width), random(height - 250)));
     }
 
   }

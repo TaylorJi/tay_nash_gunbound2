@@ -13,7 +13,7 @@ public class Obstacle implements ICollidable {
     this.isBreakable = isBreakable;
   }
 
-  public void draw(int type, PVector position, Window window) {
+  public void draw(int type, PVector position, double size, Window window) {
     switch (type) {
       case WALL:
         window.fill(118, 113, 113);
@@ -21,10 +21,12 @@ public class Obstacle implements ICollidable {
 //        window.rect(100, 100, 20, 20);
         break;
       case CIRCLE:
-        window.fill(100,115,150);
-        window.ellipse(position.x, position.y, 30, 30);
+        window.fill(100, 115, 150);
+        window.ellipse(position.x, position.y, (float)size, (float)size);
         break;
       case RECT:
+        window.fill(250, 50, 69);
+        window.rect(position.x, position.y, (float)size, (float)size);
         break;
       default:
         break;
