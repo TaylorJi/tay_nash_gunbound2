@@ -41,7 +41,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void fire(Player currentPlayer, Window window) {
     Window obj = new Window();
     OnEventListner mListner = new EventHandler();
-    obj.registerOnEventListner(mListner);
+    obj.registerOnEventListener(mListner);
     currentPlayer.setFuel(100.0F);
     window.turn = !window.turn;
     obj.afterFire();

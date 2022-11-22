@@ -47,8 +47,8 @@ public class Window extends PApplet{
 
   double obstacleSize;
 
-  public void registerOnEventListner(OnEventListner mListner) {
-    this.mListener = mListner;
+  public void registerOnEventListener(OnEventListner mListener) {
+    this.mListener = mListener;
   }
 
   public void afterFire() {
@@ -99,22 +99,23 @@ public class Window extends PApplet{
     this.title = !this.title;
   }
 
-    public void drawDashboard() {
-    textSize(20);
-    fill(8, 190, 27);
-    rect(0, dashboardHeight, this.width, 2);
-    fill(3, 253, 247);
-    text("Player1", 50, this.height - 100);
-    text("Player2", this.width - 300, this.height - 100);
-    textSize(18);
-    fill(3, 140, 253);
-    // for player1
-    text("HP", 50, this.height - 60);
-    text("Fuel", 50, this.height - 30);
-    // for player2
-    text("HP", this.width - 300, this.height - 60);
-    text("Fuel", this.width - 300, this.height - 30);
+  public void drawDashboard() {
+  textSize(20);
+  fill(8, 190, 27);
+  rect(0, dashboardHeight, this.width, 2);
+  fill(3, 253, 247);
+  text("Player1", 50, this.height - 100);
+  text("Player2", this.width - 300, this.height - 100);
+  textSize(18);
+  fill(3, 140, 253);
+  // for player1
+  text("HP", 50, this.height - 60);
+  text("Fuel", 50, this.height - 30);
+  // for player2
+  text("HP", this.width - 300, this.height - 60);
+  text("Fuel", this.width - 300, this.height - 30);
   }
+
 
   public void drawHp() {
     // for player1
