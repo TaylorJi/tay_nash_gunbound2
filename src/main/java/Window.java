@@ -43,19 +43,19 @@ public class Window extends PApplet{
 //  PVector circleVector = new PVector(random(this.height), random(this.width));
 
   protected ArrayList<PVector> obstacleVector = new ArrayList<>();
-  private OnEventListner mListner;
+  private OnEventListner mListener;
 
   double obstacleSize;
 
   public void registerOnEventListner(OnEventListner mListner) {
-    this.mListner = mListner;
+    this.mListener = mListner;
   }
 
   public void afterFire() {
     System.out.println("Fire button pushed!");
 
-    if(this.mListner != null) {
-      mListner.onEvent();
+    if(this.mListener != null) {
+      mListener.onEvent();
     }
   }
 
