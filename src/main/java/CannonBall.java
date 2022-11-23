@@ -2,6 +2,7 @@
 import processing.core.PVector;
 
 import static processing.core.PApplet.println;
+import static processing.core.PApplet.radians;
 
 public class CannonBall implements IMovable, ICollidable{
 
@@ -9,6 +10,10 @@ public class CannonBall implements IMovable, ICollidable{
   PVector relativePosition;
   PVector direction;
   //type creates a new class?
+
+  PVector acc;
+
+  float friction = 1f;
 
   Window window;
   protected float speed = 1f;
@@ -20,6 +25,12 @@ public class CannonBall implements IMovable, ICollidable{
   protected float radious = (float) 30 / 2;
 
   protected Player player;
+
+  protected float xSpeed;
+
+  protected float ySpeed;
+
+  public final double g = -0.98;
 
   int fillColour = 255;
 
@@ -43,6 +54,22 @@ public class CannonBall implements IMovable, ICollidable{
     }
 
     return false;
+  }
+
+  public float getXSpeed() {
+    return this.xSpeed;
+  }
+
+  public float setXSpeed(float f) {
+    return this.xSpeed = f;
+  }
+
+  public float getYSpeed() {
+    return this.ySpeed;
+  }
+
+  public float setYSpeed(float y) {
+    return this.ySpeed = y;
   }
 
 
@@ -85,13 +112,24 @@ public class CannonBall implements IMovable, ICollidable{
 //      System.out.println(player.getHp());
 //    }
 
-//    this.position = this.position.add(this.direction.mult(speed));
-//    println(currentPlayer.getAngleVector(currentPlayer).toString());
-    setDirection(currentPlayer.getAngleVector(currentPlayer));
-    this.relativePosition = this.relativePosition.add(this.direction.mult(speed));
-    if (outOfBounds(window)) {
-      bounce((float)Math.PI / 4f);
-    }
+    // this code makes the ball moves horizontally
+////    setXSpeed((float) (speed * Math.cos((radians((currentPlayer.getAngleVector(currentPlayer).x))))));
+//    setYSpeed(((float) (speed * -Math.sin((radians((currentPlayer.getAngleVector(currentPlayer).y)))))));
+//    setXPos(this.relativePosition.x + xSpeed);
+//    setYPos(this.relativePosition.y + ySpeed);
+
+    this.relativePosition.x = this.relativePosition.x + this.direction.mult(speed).x;
+    this.relativePosition.y = this.relativePosition.y - this.direction.mult(speed).y;
+    this.direction.y -= 0.0018f;
+
+//    this.direction.rotate(-0.005F / (1/(this.direction.mult(speed).x)));
+
+
+//    this.relativePosition = this.relativePosition.sub(this.direction.mult(speed));
+//    setDirection(currentPlayer.getAngleVector(currentPlayer));
+//    if (outOfBounds(window)) {
+//      bounce((float)Math.PI / 4f);
+//    }
 
   }
 
@@ -121,6 +159,16 @@ public class CannonBall implements IMovable, ICollidable{
   public float getHeight() {
     return this.height;
   }
+
+  public float getXPos() {return this.relativePosition.x;}
+
+  public float setXPos(float f) {return this.relativePosition.x = f;}
+
+  public float getYPos() {return this.position.y;}
+
+  public float setYPos(float f) {return this.relativePosition.y = f;}
+
+
 
   public PVector getDirection(){
     return this.direction;

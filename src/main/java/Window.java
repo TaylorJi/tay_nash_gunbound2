@@ -4,8 +4,10 @@ import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
-import java.util.ArrayList;
+import java.awt.*;
 import java.util.concurrent.TimeUnit;
+
+import java.util.ArrayList;
 
 public class Window extends PApplet{
   // create tempPos and tempDir for now
@@ -236,7 +238,7 @@ public class Window extends PApplet{
     yPos = player.getPosition().y;
     this.stroke(255,179,179);
     if (!this.turn) {
-      this.line(xPos + player.width, yPos, xPos + (angleDirection.x) * 50, yPos - (angleDirection.y) * 50);
+      this.line(xPos, yPos, xPos + (angleDirection.x) * 50, yPos - (angleDirection.y) * 50);
     } else {
       this.line(xPos, yPos, xPos - angleDirection.x * 40, yPos - angleDirection.y * 40);
     }
@@ -292,9 +294,10 @@ public class Window extends PApplet{
         currentPlayer.decreaseFuel(0.1F);
         break;
       case ENTER:
+        ball.setDirection(currentPlayer.angleDirection);
+        System.out.println(ball.getDirection());
         this.ballMove = true;
         currentPlayer.fire(currentPlayer, ball, this);
-//        this.ballMove = false;
         break;
       case BACKSPACE:
         currentPlayer.setHp(10);
