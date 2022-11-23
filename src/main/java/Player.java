@@ -38,18 +38,19 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   }
 
   @Override
-  public void fire(Player currentPlayer, Window window) {
+  public void fire(Player currentPlayer, CannonBall ball, Window window) {
     Window obj = new Window();
     OnEventListner mListner = new EventHandler();
     obj.registerOnEventListener(mListner);
-    currentPlayer.setFuel(100.0F);
-    window.turn = !window.turn;
     obj.afterFire();
   }
 
+  public void changeTurn(Player currentPlayer, Window window) {
+    currentPlayer.setFuel(100.0F);
+    window.turn = !window.turn;
+  }
   @Override
   public void collide() {
-
   }
 
   @Override
@@ -86,8 +87,12 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     currentPlayer.angleDirection.rotate(degree);
   }
 
-  double getAngle(float x, float y) {
+  public double calculateAngle(float x, float y) {
     return atan(y/x);
+  }
+
+  public PVector getAngleVector(Player currentPlayer) {
+    return currentPlayer.angleDirection;
   }
 
   @Override

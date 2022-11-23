@@ -11,7 +11,7 @@ abstract public class AbstractPlayer {
   public abstract void move(int direction);
   public abstract void setAngle(Player currentPlayer, float degree);
   public abstract void setPower();
-  public abstract void fire(Player currentPlayer, Window window);
+  public abstract void fire(Player currentPlayer, CannonBall ball,Window window);
   public abstract void collide();
   public abstract int getHp();
   public abstract void setHp(int hp);

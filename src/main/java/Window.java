@@ -14,7 +14,7 @@ public class Window extends PApplet{
   protected static final int RECT = 3;
 
   protected PVector tempPos = new PVector(50, this.height + 500);
-  protected PVector tempDir = new PVector(1f, 1f).normalize();
+  protected PVector tempDir = new PVector(1f, -1f).normalize();
 
   protected CannonBall ball = new CannonBall(tempPos, tempDir,this);
   protected int width = 1280;
@@ -47,6 +47,8 @@ public class Window extends PApplet{
 
   double obstacleSize;
 
+  boolean ballMove = false;
+
   public void registerOnEventListener(OnEventListner mListener) {
     this.mListener = mListener;
   }
@@ -73,7 +75,9 @@ public class Window extends PApplet{
     leftPlayer.draw(this);
     rightPlayer.draw(this);
     ball.draw(currentPlayer.position, this);
-    ball.move(this);
+    if(ballMove) {
+      ball.move(currentPlayer,this);
+    }
     drawAngle(currentPlayer, currentPlayer.angleDirection);
     drawDashboard();
     drawHp();
@@ -266,7 +270,7 @@ public class Window extends PApplet{
 
     if ((currentPlayer == null) || (currentPlayer.fuel == 0)){
       if(event.getKeyCode() == ENTER) {
-        currentPlayer.fire(currentPlayer, this);
+        currentPlayer.fire(currentPlayer, ball, this);
       }
       return;
     }
@@ -288,14 +292,18 @@ public class Window extends PApplet{
         currentPlayer.decreaseFuel(0.1F);
         break;
       case ENTER:
-        currentPlayer.fire(currentPlayer, this);
+        this.ballMove = true;
+        currentPlayer.fire(currentPlayer, ball, this);
+//        this.ballMove = false;
         break;
       case BACKSPACE:
         currentPlayer.setHp(10);
         break;
+      case CONTROL:
+        currentPlayer.changeTurn(currentPlayer, this);
+        break;
       case TAB:
         exit();
-
       default:
         break;
     }
