@@ -48,6 +48,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void changeTurn(Player currentPlayer, Window window) {
     currentPlayer.setFuel(100.0F);
     window.turn = !window.turn;
+    window.turnCnt++;
   }
   @Override
   public void collide() {
