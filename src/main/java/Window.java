@@ -50,8 +50,6 @@ public class Window extends PApplet{
   boolean ballMove = false;
 
   protected int turnCnt = 0;
-  protected int leftPlayerScore = 0;
-  protected int rightPlayerScore = 0;
   protected boolean cheatMode = false;
 
 
@@ -143,6 +141,7 @@ public class Window extends PApplet{
     // for player2
     text("HP", this.width - 300, this.height - 60);
     text("Fuel", this.width - 300, this.height - 30);
+    updateScore();
     updateMsgBox();
     if (this.cheatMode == true) {
       cheatModeOn(1);
@@ -165,6 +164,16 @@ public class Window extends PApplet{
       break;
     }
   }
+
+  void updateScore() {
+    String lscore = "Score: " + leftPlayer.score;
+    String rscore = "Score: " + rightPlayer.score;
+    fill(255, 255, 204);
+    text(lscore, 150, this.height - 100);
+    text(rscore, this.width - 200, this.height - 100);
+
+  }
+
 
   void updateMsgBox() {
     String rnd = "<Round: " + this.turnCnt + ">";

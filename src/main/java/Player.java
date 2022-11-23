@@ -13,6 +13,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   protected float fuel = 100.0F;
 
+  protected int score = 0;
   protected PVector angleDirection = new PVector(1,1).normalize();
 
   public Player(PVector position, Window window) {
