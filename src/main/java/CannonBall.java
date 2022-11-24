@@ -118,15 +118,18 @@ public class CannonBall implements IMovable, ICollidable{
 //    setXPos(this.relativePosition.x + xSpeed);
 //    setYPos(this.relativePosition.y + ySpeed);
 
-    this.relativePosition.x = this.relativePosition.x + this.direction.mult(speed).x;
-    this.relativePosition.y = this.relativePosition.y - this.direction.mult(speed).y;
-    this.direction.y -= 0.0018f;
+
+
+    // move ball to the direction based on the angle
+    this.relativePosition.x = this.relativePosition.x + this.direction.mult(speed).x; // x is + becuase distance will increase
+    this.relativePosition.y = this.relativePosition.y - this.direction.mult(speed).y; // y is - because in window y + means the southg
+    this.direction.y -= 0.0018f; // make the projectile movement
 
 //    this.direction.rotate(-0.005F / (1/(this.direction.mult(speed).x)));
 
 
 //    this.relativePosition = this.relativePosition.sub(this.direction.mult(speed));
-//    setDirection(currentPlayer.getAngleVector(currentPlayer));
+//    setDirection(currentPlayer.getAngleVector(currentPlayer)); // if I put it here it will set direction every second
 //    if (outOfBounds(window)) {
 //      bounce((float)Math.PI / 4f);
 //    }

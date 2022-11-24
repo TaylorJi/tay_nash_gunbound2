@@ -294,7 +294,7 @@ public class Window extends PApplet{
         currentPlayer.decreaseFuel(0.1F);
         break;
       case ENTER:
-        ball.setDirection(currentPlayer.angleDirection);
+        ball.setDirection(currentPlayer.angleDirection); // set the direction when the enter key is hit
         System.out.println(ball.getDirection());
         this.ballMove = true;
         currentPlayer.fire(currentPlayer, ball, this);
