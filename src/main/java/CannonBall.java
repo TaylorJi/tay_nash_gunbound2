@@ -73,24 +73,11 @@ public class CannonBall implements IMovable, ICollidable{
   }
 
 
-  public boolean outOfBounds(Window window) {
-//    float distance = PVector.dist(this.position, window);
-//    System.out.println(distance);
-//    if (distance == 0) {
-//      return true;
-//    }
-//    return false;
+  public boolean OutOfBounds(Window window) {
+    player = new Player(new PVector(50,this.height - 200), window);
+    return this.relativePosition.x < 0 || this.relativePosition.x > window.width
+            ||this.relativePosition.y >= 99; // difference between dashboardHeight and player.y
 
-
-
-    if ((this.position.x + radious  > window.width
-            || this.position.x < 0)
-            || (this.position.y  < 0
-            || this.position.y + radious >= window.dashboardHeight)) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
 
@@ -112,24 +99,17 @@ public class CannonBall implements IMovable, ICollidable{
 //      System.out.println(player.getHp());
 //    }
 
-    // this code makes the ball moves horizontally
-////    setXSpeed((float) (speed * Math.cos((radians((currentPlayer.getAngleVector(currentPlayer).x))))));
-//    setYSpeed(((float) (speed * -Math.sin((radians((currentPlayer.getAngleVector(currentPlayer).y)))))));
-//    setXPos(this.relativePosition.x + xSpeed);
-//    setYPos(this.relativePosition.y + ySpeed);
 
+
+    if (OutOfBounds(window)) {
+      System.out.println("ahahaha");
+    }
     this.relativePosition.x = this.relativePosition.x + this.direction.mult(speed).x;
     this.relativePosition.y = this.relativePosition.y - this.direction.mult(speed).y;
     this.direction.y -= 0.0018f;
+    System.out.println("x:" + this.relativePosition.x);
+    System.out.println("y:" + this.relativePosition.y);
 
-//    this.direction.rotate(-0.005F / (1/(this.direction.mult(speed).x)));
-
-
-//    this.relativePosition = this.relativePosition.sub(this.direction.mult(speed));
-//    setDirection(currentPlayer.getAngleVector(currentPlayer));
-//    if (outOfBounds(window)) {
-//      bounce((float)Math.PI / 4f);
-//    }
 
   }
 

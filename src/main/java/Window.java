@@ -296,6 +296,9 @@ public class Window extends PApplet{
       case ENTER:
         ball.setDirection(currentPlayer.angleDirection);
         System.out.println(ball.getDirection());
+        System.out.println("-------------------");
+        System.out.println(ball.relativePosition.x);
+        System.out.println(ball.relativePosition.y);
         this.ballMove = true;
         currentPlayer.fire(currentPlayer, ball, this);
         break;
