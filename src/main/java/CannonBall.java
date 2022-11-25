@@ -2,7 +2,6 @@
 import processing.core.PVector;
 
 import static processing.core.PApplet.println;
-import static processing.core.PApplet.radians;
 
 public class CannonBall implements IMovable, ICollidable{
 
@@ -43,6 +42,12 @@ public class CannonBall implements IMovable, ICollidable{
   }
 
 
+  public void resetBall() {
+    setSpeed(0);
+    setXPos(0);
+    setYPos(0);
+
+  }
 
 
   public boolean isHitPlayer(Player player) {
@@ -56,22 +61,6 @@ public class CannonBall implements IMovable, ICollidable{
     return false;
   }
 
-  public float getXSpeed() {
-    return this.xSpeed;
-  }
-
-  public float setXSpeed(float f) {
-    return this.xSpeed = f;
-  }
-
-  public float getYSpeed() {
-    return this.ySpeed;
-  }
-
-  public float setYSpeed(float y) {
-    return this.ySpeed = y;
-  }
-
 
   public boolean OutOfBounds(Window window) {
     player = new Player(new PVector(50,this.height - 200), window);
@@ -80,16 +69,15 @@ public class CannonBall implements IMovable, ICollidable{
 
   }
 
-
-  public void removeBall (CannonBall this) {
-    this.draw(getPosition(), window);
+  public boolean isHit(Player player) {
+    return false;
   }
 
   public void bounce(float b) {
     this.direction.rotate(b);
   }
 
-  // if the ball is out of bound then remove the ball
+
   public void move(Player currentPlayer, Window window) {
     //this method will be implemented from IMovable interface
     // cannonball moves toward in certain direction
@@ -99,16 +87,14 @@ public class CannonBall implements IMovable, ICollidable{
 //      System.out.println(player.getHp());
 //    }
 
-
-
     if (OutOfBounds(window)) {
       System.out.println("ahahaha");
+      resetBall();
+      return;
     }
     this.relativePosition.x = this.relativePosition.x + this.direction.mult(speed).x;
     this.relativePosition.y = this.relativePosition.y - this.direction.mult(speed).y;
     this.direction.y -= 0.0018f;
-    System.out.println("x:" + this.relativePosition.x);
-    System.out.println("y:" + this.relativePosition.y);
 
 
   }
@@ -119,6 +105,15 @@ public class CannonBall implements IMovable, ICollidable{
             position.y - this.radious + this.relativePosition.y,
             this.width,
             this.height);
+  }
+
+  public PVector getDirection(){
+    return this.direction;
+  }
+
+  public void  setDirection(PVector direction){
+    this.direction.x = direction.x;
+    this.direction.y = direction.y;
   }
 
   public float getRadius() {
@@ -148,16 +143,7 @@ public class CannonBall implements IMovable, ICollidable{
 
   public float setYPos(float f) {return this.relativePosition.y = f;}
 
-
-
-  public PVector getDirection(){
-    return this.direction;
-  }
-
-  public void  setDirection(PVector direction){
-    this.direction.x = direction.x;
-    this.direction.y = direction.y;
-  }
+  public void setSpeed(float f) {this.speed = f;}
 
   @Override
   public void collideBehaviour(ICollidable c) {
