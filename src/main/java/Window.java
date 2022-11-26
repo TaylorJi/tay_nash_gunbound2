@@ -64,10 +64,6 @@ public class Window extends PApplet{
   }
 
   public void draw() {
-//    if (this.title) {
-//      showTitle();
-//    }
-//    Player currentPlayer;
     if (!this.turn) {
       currentPlayer = leftPlayer;
     } else {
@@ -78,7 +74,12 @@ public class Window extends PApplet{
     rightPlayer.draw(this);
     ball.draw(currentPlayer.position, this);
     if(ballMove) {
-      ball.move(currentPlayer,this);
+      if (currentPlayer == leftPlayer){
+        ball.moveRight(currentPlayer,this);
+      } else {
+        ball.moveLeft(currentPlayer, this);
+      }
+
     }
     drawAngle(currentPlayer, currentPlayer.angleDirection);
     drawDashboard();
@@ -238,9 +239,15 @@ public class Window extends PApplet{
     yPos = player.getPosition().y;
     this.stroke(255,179,179);
     if (!this.turn) {
-      this.line(xPos, yPos, xPos + (angleDirection.x) * 50, yPos - (angleDirection.y) * 50);
+      currentPlayer = leftPlayer;
     } else {
-      this.line(xPos, yPos, xPos - angleDirection.x * 40, yPos - angleDirection.y * 40);
+      currentPlayer = rightPlayer;
+    }
+
+    if (player ==leftPlayer) {
+      this.line(xPos, yPos, xPos + (angleDirection.x * 50), yPos - (angleDirection.y) * 50);
+    } else {
+      this.line(xPos + player.width, yPos, xPos - (angleDirection.x * 50), yPos - (angleDirection.y) * 80);
     }
     this.stroke(0);
   }
@@ -295,12 +302,9 @@ public class Window extends PApplet{
         break;
       case ENTER:
         ball.setDirection(currentPlayer.angleDirection);
-        System.out.println(ball.getDirection());
-        System.out.println("-------------------");
-        System.out.println(ball.relativePosition.x);
-        System.out.println(ball.relativePosition.y);
         this.ballMove = true;
         currentPlayer.fire(currentPlayer, ball, this);
+
         break;
       case BACKSPACE:
         currentPlayer.setHp(10);
