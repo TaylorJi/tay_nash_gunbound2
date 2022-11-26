@@ -55,13 +55,6 @@ public class Window extends PApplet{
     this.mListener = mListener;
   }
 
-  public void afterFire() {
-    System.out.println("Fire button pushed!");
-
-    if(this.mListener != null) {
-      mListener.onEvent();
-    }
-  }
 
   public void draw() {
     if (!this.turn) {
@@ -96,6 +89,19 @@ public class Window extends PApplet{
     }
     if ((leftPlayer.getHp() == 0) || (rightPlayer.getHp() == 0)) {
       gameOver();
+    }
+  }
+
+  public void afterFire() {
+    System.out.println("Fire button pushed!");
+    if (!this.turn) {
+      currentPlayer = leftPlayer;
+    } else {
+      currentPlayer = rightPlayer;
+    }
+    currentPlayer.changeTurn(currentPlayer, this);
+    if(this.mListener != null) {
+      mListener.onEvent();
     }
   }
 
