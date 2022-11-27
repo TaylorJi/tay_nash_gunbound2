@@ -299,10 +299,10 @@ public class Window extends PApplet{
       case BACKSPACE:
         currentPlayer.setHp(10);
         break;
-      case CONTROL:
+      case TAB:
         currentPlayer.changeTurn(currentPlayer, this);
         break;
-      case TAB:
+      case CONTROL:
         exit();
       default:
         break;

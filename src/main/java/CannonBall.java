@@ -11,7 +11,7 @@ public class CannonBall implements IMovable, ICollidable{
   //type creates a new class?
 
   Window window;
-  protected float speed = 1f;
+  protected float speed = 0.8f;
 
   protected float width = (float) 20;
 
