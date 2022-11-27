@@ -145,15 +145,15 @@ public class Window extends PApplet{
       fill(206, 254, 238);
       text("Player1's turn",this.width - 800 ,this.height - 80 );
       fill(255, 255, 204);
-      text("Move your tank by ← → key",this.width - 800 ,this.height - 60 );
-      text("Set the angle with by ↑ ↓ key",this.width - 800 ,this.height - 40 );
+      text("Move your tank by LEFT/RIGHT key",this.width - 800 ,this.height - 60 );
+      text("Set the angle with by UP/DOWN key",this.width - 800 ,this.height - 40 );
       text("Fire the cannon ball by ENTER key",this.width - 800 ,this.height - 20 );
     } else {
       fill(206, 254, 238);
       text("Player2's turn",this.width - 800 ,this.height - 80 );
       fill(255, 255, 204);
-      text("Move your tank by ← → key",this.width - 800 ,this.height - 60 );
-      text("Set the angle with by ↑ ↓ key",this.width - 800 ,this.height - 40 );
+      text("Move your tank by LEFT/RIGHT key",this.width - 800 ,this.height - 60 );
+      text("Set the angle with by UP/DOWN key",this.width - 800 ,this.height - 40 );
       text("Fire the cannon ball by ENTER key",this.width - 800 ,this.height - 20 );
     }
 
