@@ -30,7 +30,7 @@ public class CannonBall implements IMovable, ICollidable{
 
   protected float height = (float) 20;
 
-  protected float radious = (float) 30 / 2;
+  protected float radious = (float) 20 / 2;
 
 
   protected float xSpeed;
@@ -40,6 +40,11 @@ public class CannonBall implements IMovable, ICollidable{
   public final double g = -0.98;
 
   int fillColour = 255;
+
+  PVector ballTopRight;
+  PVector ballTopLeft;
+  PVector ballBottomRight;
+  PVector ballBottomLeft;
 
 
 //  private static CannonBall singleBall;
@@ -68,29 +73,27 @@ public class CannonBall implements IMovable, ICollidable{
   }
 
   public void resetBall() {
-    setSpeed(0);
-    setXPos(0);
-    setYPos(0);
+    window.ballMove = false;
+    setRelativeXPos(0);
+    setRelativeYPos(0);
 
   }
 
 
-//  public boolean isHit (Player player, Obstacle obstacle) {
-//    // if the cannonball hits the other opponent, then loses the opponent's hp, and ends turn
-//    // if not, ends the turn
-//
-////    if ((this.relativePosition.dist(player.position) <= 0 ) {
-////
-////    }
-//
-//    if (this.position.dist(player.getPosition()) == 0) {
-//      System.out.println("touches player");
-//      return true;
-//    }
-//
-//    return false;
-//  }
+ public void didHitObstacle () {
+    for (int i = 0; i < window.obstacles.size(); i++) {
+      this.obstacle = window.obstacles.get(i);
+      if (collided(this.obstacle)) {
+        collideBehaviour(this.obstacle);
+      }
+    }
+ }
 
+ public void isHitPlayer (Player p) {
+    if (this.relativePosition.dist(p.position) <= 0) {
+      System.out.println("player is hit");
+    }
+ }
 
 
   public boolean OutOfBoundsRight(Window window) {
@@ -109,48 +112,34 @@ public class CannonBall implements IMovable, ICollidable{
   }
 
 
-  public void moveRight(Player currentPlayer, Window window) {
-    //this method will be implemented from IMovable interface
-    // cannonball moves toward in certain direction
-
-//    if (isHitPlayer(player, window)) {
-//      player.setHp(10);
-//      System.out.println(player.getHp());
-//    }
-
-    if (OutOfBoundsRight(window)) {
-      System.out.println("ahahaha");
-      resetBall();
-      return;
-    }
-    this.relativePosition.x = this.relativePosition.x + direction.mult(speed).x;
-    this.relativePosition.y = this.relativePosition.y - direction.mult(speed).y;
-    direction.y -= 0.0018f;
+  public void move(Player currentPlayer, Window window) {
     System.out.println(this.relativePosition.x);
     System.out.println(this.relativePosition.y);
 
 
-  }
-
-  public void moveLeft(Player currentPlayer, Window window) {
-    //this method will be implemented from IMovable interface
-    // cannonball moves toward in certain direction
-
-//    if (isHitPlayer(player, window)) {
-//      player.setHp(10);
-//      System.out.println(player.getHp());
-//    }
-
-    if (OutOfBoundsLeft(window)) {
-      System.out.println("ahahaha");
-      resetBall();
+    currentPlayer = window.currentPlayer;
+    if (currentPlayer == window.leftPlayer) {
+      if(OutOfBoundsRight(window)) {
+        System.out.println("ahahaha");
+        resetBall();
+      }
+      this.relativePosition.x = this.relativePosition.x + direction.mult(speed).x;
+    } else {
+      if(OutOfBoundsLeft(window)) {
+        System.out.println("ahahaha");
+        resetBall();
+      }
+      this.relativePosition.x = this.relativePosition.x - direction.mult(speed).x;
     }
-    this.relativePosition.x = this.relativePosition.x - direction.mult(speed).x;
     this.relativePosition.y = this.relativePosition.y - direction.mult(speed).y;
     direction.y -= 0.0018f;
 
+    didHitObstacle();
+
 
   }
+
+
 
   public void draw(PVector position, Window window) {
     window.fill(this.fillColour);
@@ -175,8 +164,46 @@ public class CannonBall implements IMovable, ICollidable{
 
   @Override
   public boolean collided(ICollidable c) {
+    PVector ballCenter = this.relativePosition.add(this.radious, this.radious);
+    for (Obstacle each : window.obstacles) {
+//      each.setObsTopRight(new PVector(each.getPosition().x + each.size / 2f, each.getPosition().y - each.size / 2f));
+//      each.setObsTopLeft(new PVector(each.getPosition().x - each.size / 2f, each.getPosition().y - each.size / 2f));
+//      each.setObsBottomLeft(new PVector(each.getPosition().x - each.size / 2f, each.getPosition().y + each.size / 2f));
+//      each.setObsBottomRight(new PVector(each.getPosition().x - each.size / 2f, each.getPosition().y + each.size / 2f));
+
+
+//      ballTopRight = new PVector(this.relativePosition.x + this.radious, this.relativePosition.y - this.radious);
+//      ballTopLeft = new PVector(this.relativePosition.x - this.radious, this.relativePosition.y - this.radious);
+//      ballBottomRight = new PVector(this.relativePosition.x + this.radious, this.relativePosition.y + this.radious);
+//      ballBottomLeft = new PVector(this.relativePosition.x - this.radious, this.relativePosition.y + this.radious);
+//
+//      float topLeftDist = ballTopLeft.x - each.getObsBottomLeft().x;
+//      float topRightDist = ballTopRight.x - each.getObsTopRight().x;
+//      float bottom
+//
+//      return topLeftDist <=
+//
+//
+//      boolean collided = !(
+//              this.getBottom() < b.getTop()
+//                      || this.getTop() > b.getBottom()
+//                      || this.getRight() < b.getLeft()
+//                      || this.getLeft() > b.getRight()
+//      );
+
+
+      PVector obsCenter = each.getPosition().add(each.size/2, each.size/2);
+      float dist = ballCenter.dist(obsCenter);
+      if (dist <= this.radious + each.size/2) {
+        return true;
+      }
+    }
     return false;
   }
+
+//  public float getBallTopLeft() {
+//
+//  }
 
   @Override
   public float getWidth() {
@@ -190,13 +217,13 @@ public class CannonBall implements IMovable, ICollidable{
 
   public float getXPos() {return this.relativePosition.x;}
 
-  public void setXPos(float f) {
+  public void setRelativeXPos(float f) {
     this.relativePosition.x = f;
   }
 
   public float getYPos() {return position.y;}
 
-  public void setYPos(float f) {
+  public void setRelativeYPos(float f) {
     this.relativePosition.y = f;
   }
 
@@ -204,7 +231,9 @@ public class CannonBall implements IMovable, ICollidable{
 
   @Override
   public void collideBehaviour(ICollidable c) {
-
+    System.out.println("collied");
+    resetBall();
+//    window.currentPlayer.changeTurn(window.currentPlayer, window);
   }
 
   @Override

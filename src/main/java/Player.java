@@ -138,6 +138,9 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   @Override
   public void collideBehaviour(ICollidable c) {
+    if (c instanceof CannonBall) {
+      setHp(10);
+    }
 
   }
 }

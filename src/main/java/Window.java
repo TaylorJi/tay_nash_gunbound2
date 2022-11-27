@@ -4,7 +4,6 @@ import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
-import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
 import java.util.ArrayList;
@@ -38,10 +37,10 @@ public class Window extends PApplet{
   protected PVector wallPosition = new PVector(this.width / 2, this.dashboardHeight);
 
   protected int numberOfObstacles = 40;
-  protected Obstacle wall = new Obstacle(1,false);
+  protected Obstacle wall = new Obstacle(1,false, wallPosition);
 //  protected Obstacle obstacle = new Obstacle(10, true);
 
-  protected ArrayList<Obstacle> obstacle = new ArrayList<>();
+  protected ArrayList<Obstacle> obstacles = new ArrayList<>();
 //  PVector circleVector = new PVector(random(this.height), random(this.width));
 
   protected ArrayList<PVector> obstacleVector = new ArrayList<>();
@@ -67,12 +66,7 @@ public class Window extends PApplet{
     rightPlayer.draw(this);
     ball.draw(currentPlayer.position, this);
     if(ballMove) {
-      if (currentPlayer == leftPlayer){
-        ball.moveRight(currentPlayer,this);
-      } else {
-        ball.moveLeft(currentPlayer, this);
-      }
-
+      ball.move(currentPlayer, this);
     }
     drawAngle(currentPlayer, currentPlayer.angleDirection);
     drawDashboard();
@@ -81,11 +75,11 @@ public class Window extends PApplet{
     wall.draw(WALL, wallPosition, obstacleSize, this);
     for (int i = 0; i <numberOfObstacles / 2; i++) {
       this.obstacleSize = 30;
-      obstacle.get(i).draw(CIRCLE, obstacleVector.get(i),obstacleSize ,this);
+      obstacles.get(i).draw(CIRCLE, obstacleVector.get(i),obstacleSize ,this);
     }
     for (int i = numberOfObstacles / 2; i <numberOfObstacles; i++) {
       this.obstacleSize = 10;
-      obstacle.get(i).draw(RECT, obstacleVector.get(i),obstacleSize ,this);
+      obstacles.get(i).draw(RECT, obstacleVector.get(i),obstacleSize ,this);
     }
     if ((leftPlayer.getHp() == 0) || (rightPlayer.getHp() == 0)) {
       gameOver();
@@ -94,18 +88,20 @@ public class Window extends PApplet{
 
   public void afterFire() {
     System.out.println("Fire button pushed!");
-    if (!this.turn) {
-      currentPlayer = leftPlayer;
-    } else {
-      currentPlayer = rightPlayer;
-    }
-    currentPlayer.changeTurn(currentPlayer, this);
+//    if (!this.turn) {
+//      currentPlayer = leftPlayer;
+//    } else {
+//      currentPlayer = rightPlayer;
+//    }
+//    currentPlayer.changeTurn(currentPlayer, this);
     if(this.mListener != null) {
       mListener.onEvent();
     }
   }
 
-  public void gameOver() {
+
+
+  public void gameOver() {// write sql query ex) currentPlayer name,
     if (leftPlayer.getHp() == 0) {
       textSize(100);
       rect(200, this.height - 500, 900, this.height - 500);
@@ -259,16 +255,17 @@ public class Window extends PApplet{
   }
 
   public void settings() {
+    PVector tempPos = new PVector((random(width)), random(height - 250));
     size(this.width, this.height);
     img = loadImage("title.jpg");
 
     // Initialize obstacles
     for (int i = 0; i < numberOfObstacles / 2; i++) {
-      obstacle.add(new Obstacle(1,true));
+      obstacles.add(new Obstacle(1,true, tempPos));
       obstacleVector.add(new PVector(random(width), random(height - 250)));
     }
     for (int i = numberOfObstacles / 2; i < numberOfObstacles; i++) {
-      obstacle.add(new Obstacle(1,false));
+      obstacles.add(new Obstacle(1,false, tempPos));
       obstacleVector.add(new PVector(random(width), random(height - 250)));
     }
 
