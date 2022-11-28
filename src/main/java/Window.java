@@ -33,14 +33,14 @@ public class Window extends PApplet{
 
   protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
-  protected Player currentPlayer;
+  protected Player currentPlayer = leftPlayer;
   protected PVector wallPosition = new PVector(this.width / 2, this.dashboardHeight);
 
   protected int numberOfObstacles = 40;
   protected Obstacle wall = new Obstacle(1,false, wallPosition);
 //  protected Obstacle obstacle = new Obstacle(10, true);
 
-  protected ArrayList<Obstacle> obstacles = new ArrayList<>();
+  protected ArrayList<ICollidable> collidables = new ArrayList<>();
 //  PVector circleVector = new PVector(random(this.height), random(this.width));
 
   protected ArrayList<PVector> obstacleVector = new ArrayList<>();
@@ -64,7 +64,7 @@ public class Window extends PApplet{
     background(10);
     leftPlayer.draw(this);
     rightPlayer.draw(this);
-    ball.draw(currentPlayer.position, this);
+    ball.draw(ball.position, this);
     if(ballMove) {
       ball.move(currentPlayer, this);
     }
@@ -73,13 +73,15 @@ public class Window extends PApplet{
     drawHp();
     drawFuel();
     wall.draw(WALL, wallPosition, obstacleSize, this);
-    for (int i = 0; i <numberOfObstacles / 2; i++) {
+    for (int i = 0; i < numberOfObstacles / 2; i++) {
       this.obstacleSize = 30;
-      obstacles.get(i).draw(CIRCLE, obstacleVector.get(i),obstacleSize ,this);
+      Obstacle curr = (Obstacle) collidables.get(i);
+      curr.draw(CIRCLE, curr.position, obstacleSize ,this);
     }
-    for (int i = numberOfObstacles / 2; i <numberOfObstacles; i++) {
+    for (int i = numberOfObstacles / 2; i < numberOfObstacles; i++) {
       this.obstacleSize = 10;
-      obstacles.get(i).draw(RECT, obstacleVector.get(i),obstacleSize ,this);
+      Obstacle curr = (Obstacle) collidables.get(i);
+      curr.draw(RECT, curr.position, obstacleSize ,this);
     }
     if ((leftPlayer.getHp() == 0) || (rightPlayer.getHp() == 0)) {
       gameOver();
@@ -88,16 +90,11 @@ public class Window extends PApplet{
 
   public void afterFire() {
     System.out.println("Fire button pushed!");
-//    if (!this.turn) {
-//      currentPlayer = leftPlayer;
-//    } else {
-//      currentPlayer = rightPlayer;
-//    }
-//    currentPlayer.changeTurn(currentPlayer, this);
     if(this.mListener != null) {
       mListener.onEvent();
     }
   }
+
 
 
 
@@ -255,19 +252,29 @@ public class Window extends PApplet{
   }
 
   public void settings() {
-    PVector tempPos = new PVector((random(width)), random(height - 250));
     size(this.width, this.height);
     img = loadImage("title.jpg");
 
     // Initialize obstacles
     for (int i = 0; i < numberOfObstacles / 2; i++) {
-      obstacles.add(new Obstacle(1,true, tempPos));
+      collidables.add(new Obstacle(
+              1,
+              true,
+              new PVector((random(width)), random(height - 250))
+      ));
       obstacleVector.add(new PVector(random(width), random(height - 250)));
     }
     for (int i = numberOfObstacles / 2; i < numberOfObstacles; i++) {
-      obstacles.add(new Obstacle(1,false, tempPos));
+      collidables.add(new Obstacle(
+              1,
+              false,
+              new PVector((random(width)), random(height - 250))
+      ));
       obstacleVector.add(new PVector(random(width), random(height - 250)));
     }
+    collidables.add(wall);
+    collidables.add(leftPlayer);
+    collidables.add(rightPlayer);
 
   }
   @Override
@@ -288,12 +295,18 @@ public class Window extends PApplet{
     }
     switch (event.getKeyCode()) {
       case RIGHT:
-        currentPlayer.move(5);
-        currentPlayer.decreaseFuel(2);
+        if (!ballMove) {
+          currentPlayer.move(5);
+          currentPlayer.decreaseFuel(2);
+          ball.position.x += 5;
+        }
         break;
       case LEFT:
-        currentPlayer.move(-5);
-        currentPlayer.decreaseFuel(2);
+        if (!ballMove) {
+          currentPlayer.move(-5);
+          currentPlayer.decreaseFuel(2);
+          ball.position.x -= 5;
+        }
         break;
       case UP:
         currentPlayer.setAngle(currentPlayer, 0.005F);
@@ -313,7 +326,15 @@ public class Window extends PApplet{
         currentPlayer.setHp(10);
         break;
       case CONTROL:
-        currentPlayer.changeTurn(currentPlayer, this);
+        if (!ballMove) {
+          currentPlayer.changeTurn(currentPlayer, this);
+          if (!this.turn) {
+            currentPlayer = leftPlayer;
+          } else {
+            currentPlayer = rightPlayer;
+          }
+          ball.position = currentPlayer.position;
+        }
         break;
       case TAB:
         exit();

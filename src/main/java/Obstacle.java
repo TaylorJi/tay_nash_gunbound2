@@ -59,6 +59,8 @@ public class Obstacle implements ICollidable {
   public void setObsBottomLeft(PVector pos) {this.bottomLeft = pos;}
   public void setObsBottomRight(PVector pos) {this.bottomRight = pos;}
 
+  public float getSize() {return this.size;}
+
   public PVector getObsCenterPos() {
     PVector obsCenter;
     float width = (getObsTopLeft().x + getObsTopRight().x) / 2f;

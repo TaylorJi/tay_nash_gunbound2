@@ -39,6 +39,8 @@ public class CannonBall implements IMovable, ICollidable{
 
   public final double g = -0.98;
 
+  boolean collided = false;
+
   int fillColour = 255;
 
   PVector ballTopRight;
@@ -81,18 +83,20 @@ public class CannonBall implements IMovable, ICollidable{
 
 
  public void didHitObstacle () {
-    for (int i = 0; i < window.obstacles.size(); i++) {
-      this.obstacle = window.obstacles.get(i);
-      if (collided(this.obstacle)) {
-        collideBehaviour(this.obstacle);
-      }
-    }
+   for (ICollidable each : window.collidables) {
+     if (collided(each)) {
+       collideBehaviour(each);
+     }
+   }
  }
 
- public void isHitPlayer (Player p) {
-    if (this.relativePosition.dist(p.position) <= 0) {
-      System.out.println("player is hit");
-    }
+ public void isHitPlayer (Player currentPlayer) {
+    currentPlayer = window.currentPlayer;
+
+
+//    if (this.relativePosition.dist(.position) <= ) {
+//      System.out.println("player is hit");
+//    }
  }
 
 
@@ -113,20 +117,16 @@ public class CannonBall implements IMovable, ICollidable{
 
 
   public void move(Player currentPlayer, Window window) {
-    System.out.println(this.relativePosition.x);
-    System.out.println(this.relativePosition.y);
-
-
     currentPlayer = window.currentPlayer;
     if (currentPlayer == window.leftPlayer) {
       if(OutOfBoundsRight(window)) {
-        System.out.println("ahahaha");
+        System.out.println("ball is out of bound");
         resetBall();
       }
       this.relativePosition.x = this.relativePosition.x + direction.mult(speed).x;
     } else {
       if(OutOfBoundsLeft(window)) {
-        System.out.println("ahahaha");
+        System.out.println("ball is out of bound");
         resetBall();
       }
       this.relativePosition.x = this.relativePosition.x - direction.mult(speed).x;
@@ -144,7 +144,7 @@ public class CannonBall implements IMovable, ICollidable{
   public void draw(PVector position, Window window) {
     window.fill(this.fillColour);
     window.ellipse(position.x + this.getRadius() + this.relativePosition.x,
-            position.y - this.radious + this.relativePosition.y,
+            position.y - this.getRadius() + this.relativePosition.y,
             this.width,
             this.height);
   }
@@ -162,48 +162,65 @@ public class CannonBall implements IMovable, ICollidable{
     return this.radious;
   }
 
+
   @Override
   public boolean collided(ICollidable c) {
-    PVector ballCenter = this.relativePosition.add(this.radious, this.radious);
-    for (Obstacle each : window.obstacles) {
-//      each.setObsTopRight(new PVector(each.getPosition().x + each.size / 2f, each.getPosition().y - each.size / 2f));
-//      each.setObsTopLeft(new PVector(each.getPosition().x - each.size / 2f, each.getPosition().y - each.size / 2f));
-//      each.setObsBottomLeft(new PVector(each.getPosition().x - each.size / 2f, each.getPosition().y + each.size / 2f));
-//      each.setObsBottomRight(new PVector(each.getPosition().x - each.size / 2f, each.getPosition().y + each.size / 2f));
+    float xPos = this.position.x + this.getRadius() + this.relativePosition.x;
+    float yPos = this.position.y - this.getRadius() + this.relativePosition.y;
 
+    PVector cannonBallCenter = new PVector(
+            xPos,
+            yPos
+    );
+    // obstacle collision
+    if (c instanceof Obstacle) {
+      Obstacle obs = (Obstacle) c;
+      PVector obstacleCenter = null;
+      if (obs.getSize() == 10) {
+        obstacleCenter = new PVector(
+                obs.getPosition().x + obs.getSize()/2,
+                obs.getPosition().y + obs.getSize()/2
+        );
+      } else {
+        obstacleCenter = new PVector(
+                obs.getPosition().x,
+                obs.getPosition().y
+        );
+      }
 
-//      ballTopRight = new PVector(this.relativePosition.x + this.radious, this.relativePosition.y - this.radious);
-//      ballTopLeft = new PVector(this.relativePosition.x - this.radious, this.relativePosition.y - this.radious);
-//      ballBottomRight = new PVector(this.relativePosition.x + this.radious, this.relativePosition.y + this.radious);
-//      ballBottomLeft = new PVector(this.relativePosition.x - this.radious, this.relativePosition.y + this.radious);
-//
-//      float topLeftDist = ballTopLeft.x - each.getObsBottomLeft().x;
-//      float topRightDist = ballTopRight.x - each.getObsTopRight().x;
-//      float bottom
-//
-//      return topLeftDist <=
-//
-//
-//      boolean collided = !(
-//              this.getBottom() < b.getTop()
-//                      || this.getTop() > b.getBottom()
-//                      || this.getRight() < b.getLeft()
-//                      || this.getLeft() > b.getRight()
-//      );
-
-
-      PVector obsCenter = each.getPosition().add(each.size/2, each.size/2);
-      float dist = ballCenter.dist(obsCenter);
-      if (dist <= this.radious + each.size/2) {
+      if (cannonBallCenter.dist(obstacleCenter) <= this.getRadius() + obs.getSize()/2) {
         return true;
       }
     }
+
+    // player collision
+    if (c instanceof Player) {
+      Player ply = (Player) c;
+      float edge = (float) Math.sqrt(Math.pow(ply.getHeight()/2, 2) + Math.pow(ply.getWidth()/2, 2));
+      PVector playerCenter = new PVector(
+              ply.getPosition().x + edge,
+              ply.getPosition().y + edge
+      );
+
+      if (cannonBallCenter.dist(playerCenter) <= this.getRadius() + edge) {
+        return true;
+      }
+    }
+
+    // wall collision
+    if (yPos >= window.height - 130 - (float) window.height / 4) {
+      if ((float) window.width / 2 - this.getRadius()/2 <= xPos &&
+              (float) window.width / 2 + this.getRadius()/2 >= xPos) {
+        System.out.println("wall");
+        return true;
+      }
+    }
+
     return false;
   }
 
-//  public float getBallTopLeft() {
-//
-//  }
+
+
 
   @Override
   public float getWidth() {
@@ -231,9 +248,35 @@ public class CannonBall implements IMovable, ICollidable{
 
   @Override
   public void collideBehaviour(ICollidable c) {
-    System.out.println("collied");
+    System.out.println("collided");
+
+    if (c instanceof Obstacle) {
+      System.out.println("obstacle");
+      window.currentPlayer.changeTurn(window.currentPlayer, window);
+      if (!window.turn) {
+        window.currentPlayer = window.leftPlayer;
+      } else {
+        window.currentPlayer = window.rightPlayer;
+      }
+      this.position = window.currentPlayer.position;
+    }
+    if (c instanceof Player) {
+      System.out.println("player");
+      if (!window.turn) {
+        window.rightPlayer.setHp(10);
+      } else {
+        window.leftPlayer.setHp(10);
+      }
+      window.currentPlayer.changeTurn(window.currentPlayer, window);
+      if (!window.turn) {
+        window.currentPlayer = window.leftPlayer;
+      } else {
+        window.currentPlayer = window.rightPlayer;
+      }
+      this.position = window.currentPlayer.position;
+    }
+
     resetBall();
-//    window.currentPlayer.changeTurn(window.currentPlayer, window);
   }
 
   @Override
