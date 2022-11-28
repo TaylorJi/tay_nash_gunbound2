@@ -14,17 +14,15 @@ public class Window extends PApplet{
   protected static final int CIRCLE = 2;
   protected static final int RECT = 3;
 
-  protected PVector tempPos = new PVector(50, this.height + 500);
   protected PVector tempDir = new PVector(1f, -1f).normalize();
 
-  protected CannonBall ball = new CannonBall(tempPos, tempDir,this);
   protected int width = 1280;
   protected int height = 720;
 
   // turn = false means player1's turn.
   // turn = true means player2's turn.
   protected boolean turn = false;
-//  protected boolean turn = true;
+  //  protected boolean turn = true;
   protected boolean title = true;
   PImage img;
   protected int dashboardHeight = this.height - 130;
@@ -34,6 +32,7 @@ public class Window extends PApplet{
   protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
   protected Player currentPlayer = leftPlayer;
+  protected CannonBall ball = new CannonBall(currentPlayer.position, tempDir,this);
   protected PVector wallPosition = new PVector(this.width / 2, this.dashboardHeight);
 
   protected int numberOfObstacles = 40;
@@ -97,7 +96,6 @@ public class Window extends PApplet{
 
 
 
-
   public void gameOver() {// write sql query ex) currentPlayer name,
     if (leftPlayer.getHp() == 0) {
       textSize(100);
@@ -125,21 +123,21 @@ public class Window extends PApplet{
   }
 
   public void drawDashboard() {
-  textSize(20);
-  fill(8, 190, 27);
-  rect(0, dashboardHeight, this.width, 2);
-  fill(3, 253, 247);
-  text("Player1", 50, this.height - 100);
-  text("Player2", this.width - 300, this.height - 100);
-  textSize(18);
-  fill(3, 140, 253);
-  // for player1
-  text("HP", 50, this.height - 60);
-  text("Fuel", 50, this.height - 30);
-  // for player2
-  text("HP", this.width - 300, this.height - 60);
-  text("Fuel", this.width - 300, this.height - 30);
-  updateMsgBox();
+    textSize(20);
+    fill(8, 190, 27);
+    rect(0, dashboardHeight, this.width, 2);
+    fill(3, 253, 247);
+    text("Player1", 50, this.height - 100);
+    text("Player2", this.width - 300, this.height - 100);
+    textSize(18);
+    fill(3, 140, 253);
+    // for player1
+    text("HP", 50, this.height - 60);
+    text("Fuel", 50, this.height - 30);
+    // for player2
+    text("HP", this.width - 300, this.height - 60);
+    text("Fuel", this.width - 300, this.height - 30);
+    updateMsgBox();
   }
 
   void updateMsgBox() {
@@ -275,12 +273,10 @@ public class Window extends PApplet{
     collidables.add(wall);
     collidables.add(leftPlayer);
     collidables.add(rightPlayer);
-
   }
   @Override
   public void keyPressed(KeyEvent event) {
     super.keyPressed(event);
-//    Player currentPlayer;
     if (!this.turn) {
       currentPlayer = leftPlayer;
     } else {
@@ -309,18 +305,17 @@ public class Window extends PApplet{
         }
         break;
       case UP:
-        currentPlayer.setAngle(currentPlayer, 0.005F);
+        currentPlayer.setAngle(currentPlayer, 0.006F);
         currentPlayer.decreaseFuel(0.1F);
         break;
       case DOWN:
-        currentPlayer.setAngle(currentPlayer, -0.005F);
+        currentPlayer.setAngle(currentPlayer, -0.006F);
         currentPlayer.decreaseFuel(0.1F);
         break;
       case ENTER:
         ball.setDirection(currentPlayer.angleDirection);
         this.ballMove = true;
         currentPlayer.fire(currentPlayer, ball, this);
-
         break;
       case BACKSPACE:
         currentPlayer.setHp(10);

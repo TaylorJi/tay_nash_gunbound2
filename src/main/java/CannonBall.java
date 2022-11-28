@@ -1,4 +1,3 @@
-
 import processing.core.PVector;
 
 import static processing.core.PApplet.println;
@@ -19,10 +18,6 @@ public class CannonBall implements IMovable, ICollidable{
   float friction = 1f;
 
   Window window;
-
-  protected Player player;
-
-  protected Obstacle obstacle;
 
   protected float speed = 1f;
 
@@ -66,7 +61,6 @@ public class CannonBall implements IMovable, ICollidable{
 //    return singleBall;
 //  }
 
-
   public CannonBall(PVector position, PVector direction, Window window) {
     this.position = position;
     this.direction = direction;
@@ -78,35 +72,18 @@ public class CannonBall implements IMovable, ICollidable{
     window.ballMove = false;
     setRelativeXPos(0);
     setRelativeYPos(0);
+  }
 
+  public void didHitObstacle() {
+    for (ICollidable each : window.collidables) {
+      if (collided(each)) {
+        collideBehaviour(each);
+      }
+    }
   }
 
 
- public void didHitObstacle () {
-   for (ICollidable each : window.collidables) {
-     if (collided(each)) {
-       collideBehaviour(each);
-     }
-   }
- }
-
- public void isHitPlayer (Player currentPlayer) {
-    currentPlayer = window.currentPlayer;
-
-
-//    if (this.relativePosition.dist(.position) <= ) {
-//      System.out.println("player is hit");
-//    }
- }
-
-
-  public boolean OutOfBoundsRight(Window window) {
-    return this.relativePosition.x < 0 || this.relativePosition.x > window.width
-            ||this.relativePosition.y >= 81; // difference between dashboardHeight and player.y
-
-  }
-
-  public boolean OutOfBoundsLeft(Window window) {
+  public boolean OutOfBounds(Window window) {
     return this.relativePosition.y >= 81; // difference between dashboardHeight and player.y
 
   }
@@ -117,29 +94,31 @@ public class CannonBall implements IMovable, ICollidable{
 
 
   public void move(Player currentPlayer, Window window) {
-    currentPlayer = window.currentPlayer;
     if (currentPlayer == window.leftPlayer) {
-      if(OutOfBoundsRight(window)) {
-        System.out.println("ball is out of bound");
-        resetBall();
-      }
+      outOfBound(window);
       this.relativePosition.x = this.relativePosition.x + direction.mult(speed).x;
     } else {
-      if(OutOfBoundsLeft(window)) {
-        System.out.println("ball is out of bound");
-        resetBall();
-      }
+      outOfBound(window);
       this.relativePosition.x = this.relativePosition.x - direction.mult(speed).x;
     }
     this.relativePosition.y = this.relativePosition.y - direction.mult(speed).y;
     direction.y -= 0.0018f;
 
     didHitObstacle();
-
-
   }
 
-
+  private void outOfBound(Window window) {
+    if(OutOfBounds(window)) {
+      resetBall();
+      window.currentPlayer.changeTurn(window.currentPlayer, window);
+      if (!window.turn) {
+        window.currentPlayer = window.leftPlayer;
+      } else {
+        window.currentPlayer = window.rightPlayer;
+      }
+      this.position = window.currentPlayer.position;
+    }
+  }
 
   public void draw(PVector position, Window window) {
     window.fill(this.fillColour);
@@ -161,7 +140,6 @@ public class CannonBall implements IMovable, ICollidable{
   public float getRadius() {
     return this.radious;
   }
-
 
   @Override
   public boolean collided(ICollidable c) {
@@ -218,9 +196,6 @@ public class CannonBall implements IMovable, ICollidable{
 
     return false;
   }
-
-
-
 
   @Override
   public float getWidth() {
