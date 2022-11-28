@@ -52,6 +52,11 @@ public class Window extends PApplet{
   protected int turnCnt = 0;
   protected boolean cheatMode = false;
 
+  // default : 0
+  // player 1 won: 1
+  // player 2 won: 2
+  protected int winner = 0;
+
 
   public void registerOnEventListener(OnEventListner mListener) {
     this.mListener = mListener;
@@ -107,12 +112,14 @@ public class Window extends PApplet{
       fill(3, 253, 247);
       text("Player2 won!", 200, this.height - 400);
       text("Press ESC key to quit.", 200, this.height - 300);
+      this.winner = 2;
     } else if (rightPlayer.getHp() == 0) {
       textSize(100);
       rect(200, this.height - 500, 900, this.height - 500);
       fill(3, 253, 247);
       text("Player1 won!", 200, this.height - 400);
       text("Press ESC key to quit.", 200, this.height - 300);
+      this.winner = 1;
     }
   }
 
@@ -172,6 +179,30 @@ public class Window extends PApplet{
     text(lscore, 150, this.height - 100);
     text(rscore, this.width - 200, this.height - 100);
 
+  }
+
+  int calculateTotalScore() {
+    // + 50 : if one player's cannonball hits other player
+    // + 5 : if one player's cannonball breaks obstacle in the air
+    // final score calculation logic
+    // 1) remained turns : + (100 - current turn) * 10
+    // 2) difference from other players' HP : (my HP - other's HP) *20
+    // 3) plus current score
+    int turnScore = 0;
+    int hpScore = 0;
+
+    switch(winner) {
+      case 1:
+//        leftPlayer.score +=
+        break;
+      case 2:
+        break;
+      default:
+        break;
+    }
+
+//    finalscore =
+    return 0;
   }
 
 
@@ -336,11 +367,11 @@ public class Window extends PApplet{
         break;
       case BACKSPACE:
         if (cheatMode)
-        currentPlayer.setHp(-10);
+          currentPlayer.setHp(-10);
         break;
       case DELETE:
         if (cheatMode)
-        currentPlayer.decreaseFuel(-10);
+          currentPlayer.decreaseFuel(-10);
         break;
       case TAB:
         currentPlayer.changeTurn(currentPlayer, this);
