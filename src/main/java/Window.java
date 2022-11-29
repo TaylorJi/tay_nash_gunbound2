@@ -19,6 +19,7 @@ public class Window extends PApplet{
   protected int width = 1280;
   protected int height = 720;
 
+
   // turn = false means player1's turn.
   // turn = true means player2's turn.
   protected boolean turn = false;

@@ -107,6 +107,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     return currentPlayer.angleDirection;
   }
 
+
   public void setScore (int score) {this.score += score;}
 
   @Override

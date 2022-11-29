@@ -143,6 +143,7 @@ public class CannonBall implements IMovable, ICollidable{
             xPos,
             yPos
     );
+
     // obstacle collision
     if (c instanceof Obstacle) {
       Obstacle obs = (Obstacle) c;
