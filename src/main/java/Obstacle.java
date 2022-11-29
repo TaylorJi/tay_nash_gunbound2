@@ -7,13 +7,6 @@ public class Obstacle implements ICollidable {
 
   protected boolean isBreakable = false;
   protected int numberOfObstacles = 0;
-
-  private PVector topRight;
-  private PVector topLeft;
-  private PVector bottomLeft;
-  private PVector bottomRight;
-
-
   protected float size;
 
   protected PVector position;
@@ -27,7 +20,6 @@ public class Obstacle implements ICollidable {
   }
 
   public void draw(int type, PVector position, double size, Window window) {
-    this.size = (float)size;
     switch (type) {
       case WALL:
         window.fill(118, 113, 113);
@@ -49,26 +41,9 @@ public class Obstacle implements ICollidable {
 //    window.rect(window.width / 2, window.dashboardHeight, 20, -window.height / 4);
   }
 
-  public PVector getObsTopLeft() {return this.topLeft;}
-  public PVector getObsTopRight() {return this.topRight;}
-  public PVector getObsBottomLeft() {return this.bottomLeft;}
-  public PVector getObsBottomRight() {return this.bottomRight;}
-
-  public void setObsTopLeft(PVector pos) {this.topLeft = pos;}
-  public void setObsTopRight(PVector pos) {this.topRight = pos;}
-  public void setObsBottomLeft(PVector pos) {this.bottomLeft = pos;}
-  public void setObsBottomRight(PVector pos) {this.bottomRight = pos;}
-
-  public float getSize() {return this.size;}
-
-  public PVector getObsCenterPos() {
-    PVector obsCenter;
-    float width = (getObsTopLeft().x + getObsTopRight().x) / 2f;
-    float height = (getObsTopLeft().y + getObsBottomLeft().y) / 2f;
-    obsCenter = new PVector(width, height);
-    return obsCenter;
+  public float getSize () {
+    return this.size;
   }
-
   @Override
   public boolean collided(ICollidable c) {
     return false;
@@ -93,4 +68,5 @@ public class Obstacle implements ICollidable {
   public void collideBehaviour(ICollidable c) {
 
   }
+
 }

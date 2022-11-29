@@ -22,7 +22,7 @@ public class Window extends PApplet{
   // turn = false means player1's turn.
   // turn = true means player2's turn.
   protected boolean turn = false;
-//  protected boolean turn = true;
+  //  protected boolean turn = true;
   protected boolean title = true;
   PImage img;
   protected int dashboardHeight = this.height - 130;
@@ -30,7 +30,7 @@ public class Window extends PApplet{
   protected String player1Name;
   protected String player2Name;
 
-  protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
+  protected Player leftPlayer = new Player(new PVector(width -200,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
   protected Player currentPlayer = leftPlayer;
   protected CannonBall ball = new CannonBall(currentPlayer.position, tempDir,this);
@@ -57,6 +57,8 @@ public class Window extends PApplet{
   // player 1 won: 1
   // player 2 won: 2
   protected int winner = 0;
+
+  protected DBTest dbTest;
 
 
   public void registerOnEventListener(OnEventListner mListener) {
@@ -109,8 +111,10 @@ public class Window extends PApplet{
 
   public void gameOver() {
     if (leftPlayer.getHp() == 0) {
+      dbTest = new DBTest();
       gameOverMsg(player2Name);
       this.winner = 2;
+
     } else if (rightPlayer.getHp() == 0) {
       gameOverMsg(player1Name);
       this.winner = 1;
@@ -167,13 +171,13 @@ public class Window extends PApplet{
         text("<Test Mode>", this.width - 600, this.height - 100);
 //        text("Z: increase my HP", this.width - 600, this.height - 180);
 //        text("X: increase my FUEL", this.width - 600, this.height - 160);
-      break;
+        break;
       case 1:
         fill(127, 127, 127);
         text("<Test Mode>", this.width - 600, this.height - 100);
 //        text("Z: increase my HP", this.width - 600, this.height - 180);
 //        text("X: increase my FUEL", this.width - 600, this.height - 160);
-      break;
+        break;
     }
   }
 

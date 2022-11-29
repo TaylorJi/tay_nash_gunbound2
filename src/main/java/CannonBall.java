@@ -1,9 +1,12 @@
-
 import processing.core.PVector;
 
 import static processing.core.PApplet.println;
 
 public class CannonBall implements IMovable, ICollidable{
+
+//  protected PVector tempPos = new PVector(50, this.height + 500);
+//  protected PVector tempDir = new PVector(1f, -1f).normalize();
+
 
   PVector position;
   PVector relativePosition;
@@ -15,6 +18,7 @@ public class CannonBall implements IMovable, ICollidable{
   float friction = 1f;
 
   Window window;
+
   protected float speed = 1f;
 
   protected float width = (float) 20;
@@ -34,28 +38,6 @@ public class CannonBall implements IMovable, ICollidable{
 
   int fillColour = 255;
 
-  PVector ballTopRight;
-  PVector ballTopLeft;
-  PVector ballBottomRight;
-  PVector ballBottomLeft;
-
-
-//  private static CannonBall singleBall;
-//
-//  private CannonBall(PVector tempPos, PVector tempDir, Window window) {
-//    CannonBall.position = tempPos;
-//    CannonBall.direction = tempDir;
-//    CannonBall.window = window;
-//    this.relativePosition = new PVector(0,0);
-//  }
-//
-//
-//  public static CannonBall getInstance() {
-//    if (singleBall == null) {
-//      singleBall = new CannonBall(position, direction, window);
-//    }
-//    return singleBall;
-//  }
 
   public CannonBall(PVector position, PVector direction, Window window) {
     this.position = position;
@@ -63,6 +45,7 @@ public class CannonBall implements IMovable, ICollidable{
     this.window = window;
     this.relativePosition = new PVector(0,0);
   }
+
 
   public void resetBall() {
     window.ballMove = false;
@@ -78,6 +61,26 @@ public class CannonBall implements IMovable, ICollidable{
     }
   }
 
+  public void ballHoldPos() {
+    if ((window.currentPlayer.getPosition().x + window.currentPlayer.width <= window.wallPosition.x)
+            ||window.currentPlayer.getPosition().x - window.currentPlayer.width >= window.wallPosition.x) {
+      window.ballMove = false;
+    }
+  }
+
+
+  public boolean isHitPlayer(Player player) {
+    // if the cannonball hits the other opponent, then loses the opponent's hp, and ends turn
+    // if not, ends the turn
+    if (this.position.dist(player.getPosition()) == 0) {
+      System.out.println("touches player");
+      return true;
+    }
+
+    return false;
+  }
+
+
 
   public boolean OutOfBounds(Window window) {
     return this.relativePosition.y >= 81; // difference between dashboardHeight and player.y
@@ -85,17 +88,17 @@ public class CannonBall implements IMovable, ICollidable{
   }
 
   public void bounce(float b) {
-    this.direction.rotate(b);
+    direction.rotate(b);
   }
 
 
   public void move(Player currentPlayer, Window window) {
     if (currentPlayer == window.leftPlayer) {
-      outOfBound(window);
-      this.relativePosition.x = this.relativePosition.x + direction.mult(speed).x;
+      ballOutOfBound(window);
+      this.relativePosition.x = this.relativePosition.x + 2* direction.mult(speed).x;
     } else {
-      outOfBound(window);
-      this.relativePosition.x = this.relativePosition.x - direction.mult(speed).x;
+      ballOutOfBound(window);
+      this.relativePosition.x = this.relativePosition.x - 2 * direction.mult(speed).x;
     }
     this.relativePosition.y = this.relativePosition.y - direction.mult(speed).y;
     direction.y -= 0.0018f;
@@ -103,7 +106,7 @@ public class CannonBall implements IMovable, ICollidable{
     didHitObstacle();
   }
 
-  private void outOfBound(Window window) {
+  private void ballOutOfBound(Window window) {
     if(OutOfBounds(window)) {
       resetBall();
       window.currentPlayer.changeTurn(window.currentPlayer, window);
@@ -114,6 +117,7 @@ public class CannonBall implements IMovable, ICollidable{
       }
       this.position = window.currentPlayer.position;
     }
+
   }
 
   public void draw(PVector position, Window window) {
@@ -124,14 +128,7 @@ public class CannonBall implements IMovable, ICollidable{
             this.height);
   }
 
-  public PVector getDirection(){
-    return direction;
-  }
 
-  public void  setDirection(PVector direction){
-    this.direction.x = direction.x;
-    this.direction.y = direction.y;
-  }
 
   public float getRadius() {
     return this.radious;
@@ -203,19 +200,14 @@ public class CannonBall implements IMovable, ICollidable{
     return this.height;
   }
 
-  public float getXPos() {return this.relativePosition.x;}
-
-  public void setRelativeXPos(float f) {
-    this.relativePosition.x = f;
+  public PVector getDirection(){
+    return this.direction;
   }
 
-  public float getYPos() {return position.y;}
-
-  public void setRelativeYPos(float f) {
-    this.relativePosition.y = f;
+  public void  setDirection(PVector direction){
+    this.direction.x = direction.x;
+    this.direction.y = direction.y;
   }
-
-  public void setSpeed(float f) {this.speed = f;}
 
   @Override
   public void collideBehaviour(ICollidable c) {
@@ -225,17 +217,21 @@ public class CannonBall implements IMovable, ICollidable{
       System.out.println("obstacle");
       window.currentPlayer.changeTurn(window.currentPlayer, window);
       if (!window.turn) {
+        window.currentPlayer.setScore(5);
         window.currentPlayer = window.leftPlayer;
       } else {
-        window.currentPlayer = window.rightPlayer;
+        window.currentPlayer.setScore(5);
+        window.currentPlayer = window.rightPlayer;;
       }
       this.position = window.currentPlayer.position;
     }
     if (c instanceof Player) {
       System.out.println("player");
       if (!window.turn) {
+        window.currentPlayer.setScore(50);
         window.rightPlayer.setHp(10);
       } else {
+        window.currentPlayer.setScore(50);
         window.leftPlayer.setHp(10);
       }
       window.currentPlayer.changeTurn(window.currentPlayer, window);
@@ -249,6 +245,10 @@ public class CannonBall implements IMovable, ICollidable{
 
     resetBall();
   }
+
+  public void setRelativeXPos (float f) {this.relativePosition.x = f;}
+  public void setRelativeYPos (float f) {this.relativePosition.y = f;}
+
 
   @Override
   public PVector getPosition() {
@@ -269,4 +269,8 @@ public class CannonBall implements IMovable, ICollidable{
   public PVector getPower() {
     return null;
   }
+
+
+
+
 }
