@@ -69,21 +69,13 @@ public class CannonBall implements IMovable, ICollidable{
   }
 
 
-  public boolean isHitPlayer(Player player) {
-    // if the cannonball hits the other opponent, then loses the opponent's hp, and ends turn
-    // if not, ends the turn
-    if (this.position.dist(player.getPosition()) == 0) {
-      System.out.println("touches player");
-      return true;
-    }
-
-    return false;
-  }
-
-
-
   public boolean OutOfBounds(Window window) {
-    return this.relativePosition.y >= 81; // difference between dashboardHeight and player.y
+    if (window.currentPlayer == window.leftPlayer)
+    { return  this.relativePosition.x + window.currentPlayer.getPosition().x >= window.width || this.relativePosition.y >= 81;
+
+    } else {
+      return this.relativePosition.x + window.currentPlayer.getPosition().x <= 0 || this.relativePosition.y >= 81;
+    }
 
   }
 
@@ -93,6 +85,9 @@ public class CannonBall implements IMovable, ICollidable{
 
 
   public void move(Player currentPlayer, Window window) {
+    System.out.println("x" + this.relativePosition.x);
+    System.out.println("y" + this.relativePosition.y);
+
     if (currentPlayer == window.leftPlayer) {
       ballOutOfBound(window);
       this.relativePosition.x = this.relativePosition.x + 2 * direction.mult(speed).x;
@@ -184,6 +179,7 @@ public class CannonBall implements IMovable, ICollidable{
       if ((float) window.width / 2 - this.getRadius()/2 <= xPos &&
               (float) window.width / 2 + this.getRadius()/2 >= xPos) {
         System.out.println("wall");
+        System.out.println(window.wall.isBreakable);
         return true;
       }
     }
@@ -213,16 +209,26 @@ public class CannonBall implements IMovable, ICollidable{
   @Override
   public void collideBehaviour(ICollidable c) {
     System.out.println("collided");
+    Obstacle tempWall;
 
     if (c instanceof Obstacle) {
       System.out.println("obstacle");
+      tempWall = (Obstacle)window.collidables.get(window.collidables.size()-1);
       window.currentPlayer.changeTurn(window.currentPlayer, window);
       if (!window.turn) {
-        window.currentPlayer.setScore(5);
+        if (((Obstacle) c).isBreakable) {
+          window.currentPlayer.setScore(5);
+        } else {
+          window.currentPlayer.setScore(-10);
+        }
         window.currentPlayer = window.leftPlayer;
       } else {
-        window.currentPlayer.setScore(5);
-        window.currentPlayer = window.rightPlayer;;
+        if (((Obstacle) c).isBreakable) {
+          window.currentPlayer.setScore(5);
+        } else {
+          window.currentPlayer.setScore(-10);
+        }
+          window.currentPlayer = window.rightPlayer;;
       }
       this.position = window.currentPlayer.position;
     }
