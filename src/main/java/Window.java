@@ -74,9 +74,9 @@ public class Window extends PApplet{
   }
 
   public void draw() {
-//    if (this.title) {
-//      showTitle();
-//    }
+    if (this.title) {
+      showTitle();
+    }
     if (!this.turn) {
       currentPlayer = leftPlayer;
     } else {
@@ -95,12 +95,12 @@ public class Window extends PApplet{
     drawFuel();
     wall.draw(WALL, wallPosition, obstacleSize, this);
     for (int i = 0; i < numberOfObstacles / 2; i++) {
-      this.obstacleSize = 30;
+      this.obstacleSize = 10;
       Obstacle curr = (Obstacle) collidables.get(i);
       curr.draw(CIRCLE, curr.position, obstacleSize ,this);
     }
     for (int i = numberOfObstacles / 2; i < numberOfObstacles; i++) {
-      this.obstacleSize = 10;
+      this.obstacleSize = 5;
       Obstacle curr = (Obstacle) collidables.get(i);
       curr.draw(RECT, curr.position, obstacleSize ,this);
     }

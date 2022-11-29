@@ -95,12 +95,12 @@ public class CannonBall implements IMovable, ICollidable{
   public void move(Player currentPlayer, Window window) {
     if (currentPlayer == window.leftPlayer) {
       ballOutOfBound(window);
-      this.relativePosition.x = this.relativePosition.x + 2* direction.mult(speed).x;
+      this.relativePosition.x = this.relativePosition.x + 2 * direction.mult(speed).x;
     } else {
       ballOutOfBound(window);
       this.relativePosition.x = this.relativePosition.x - 2 * direction.mult(speed).x;
     }
-    this.relativePosition.y = this.relativePosition.y - direction.mult(speed).y;
+    this.relativePosition.y = this.relativePosition.y - 2 * direction.mult(speed).y;
     direction.y -= 0.0018f;
 
     didHitObstacle();
