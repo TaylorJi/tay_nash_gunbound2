@@ -29,7 +29,16 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     } else {
       xPos = getPosition().x + direction;
     }
-    // TODO Implement the player's movement into wall
+    boolean turn = window.getTurn();
+    if ((turn == false) && (!window.cheatMode)){
+      if ((xPos + direction + 30) >= (window.width / 2)) {
+        xPos = getPosition().x;
+      }
+    } else if ((turn == true) && (!window.cheatMode)) {
+      if ((xPos + direction) <= (window.width / 2)) {
+        xPos = getPosition().x;
+      }
+    }
     PVector temp = new PVector(xPos, yPos);
     this.setPosition(temp);
   }
@@ -67,6 +76,9 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     if(this.hp <= 0) {
     this.hp = 0;
     }
+    if(this.hp > 200) {
+      this.hp = 200;
+    }
   }
 
   @Override
@@ -83,6 +95,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void decreaseFuel(float fuel) {
     this.fuel -= fuel;
     if (this.fuel <= 0) this.fuel = 0;
+    if (this.fuel >= 200) this.fuel = 200;
   }
 
   @Override

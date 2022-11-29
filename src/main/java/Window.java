@@ -5,6 +5,7 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Window extends PApplet{
@@ -27,6 +28,9 @@ public class Window extends PApplet{
   protected boolean title = true;
   PImage img;
   protected int dashboardHeight = this.height - 130;
+
+  protected String player1Name;
+  protected String player2Name;
 
   PFont font;
 
@@ -74,7 +78,6 @@ public class Window extends PApplet{
 //    if (this.title) {
 //      showTitle();
 //    }
-//    Player currentPlayer;
     if (!this.turn) {
       currentPlayer = leftPlayer;
     } else {
@@ -110,23 +113,24 @@ public class Window extends PApplet{
       textSize(100);
       rect(200, this.height - 500, 900, this.height - 500);
       fill(3, 253, 247);
-      text("Player2 won!", 200, this.height - 400);
+      text(player2Name + " won!", 200, this.height - 400);
       text("Press ESC key to quit.", 200, this.height - 300);
       this.winner = 2;
     } else if (rightPlayer.getHp() == 0) {
       textSize(100);
       rect(200, this.height - 500, 900, this.height - 500);
       fill(3, 253, 247);
-      text("Player1 won!", 200, this.height - 400);
+      text(player1Name + " won!", 200, this.height - 400);
       text("Press ESC key to quit.", 200, this.height - 300);
       this.winner = 1;
     }
+    calculateTotalScore(this.winner);
   }
 
   public void showTitle() {
-    image(img, 0, 0);
+    image(img, 35, 0);
     try {
-      TimeUnit.SECONDS.sleep(3);
+      TimeUnit.SECONDS.sleep(5);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -138,8 +142,8 @@ public class Window extends PApplet{
     fill(8, 190, 27);
     rect(0, dashboardHeight, this.width, 2);
     fill(3, 253, 247);
-    text("Player1", 50, this.height - 100);
-    text("Player2", this.width - 300, this.height - 100);
+    text(player1Name, 50, this.height - 100);
+    text(player2Name, this.width - 300, this.height - 100);
     textSize(18);
     fill(3, 140, 253);
     // for player1
@@ -159,15 +163,15 @@ public class Window extends PApplet{
     switch (option) {
       case 0:
         fill(0, 0, 0);
-        text("<Cheat Mode>", this.width - 600, this.height - 100);
-        text("DELETE: increase my HP", this.width - 600, this.height - 80);
-        text("BACKSPACE: increase my FUEL", this.width - 600, this.height - 60);
+        text("<Cheat Mode>", this.width - 600, this.height - 200);
+        text("BACKSPACE: increase my HP", this.width - 600, this.height - 180);
+        text("DELETE: increase my FUEL", this.width - 600, this.height - 160);
       break;
       case 1:
         fill(127, 127, 127);
-        text("<Cheat Mode>", this.width - 600, this.height - 100);
-        text("DELETE: increase my HP", this.width - 600, this.height - 80);
-        text("BACKSPACE: increase my FUEL", this.width - 600, this.height - 60);
+        text("<Cheat Mode>", this.width - 600, this.height - 200);
+        text("BACKSPACE: increase my HP", this.width - 600, this.height - 180);
+        text("DELETE: increase my FUEL", this.width - 600, this.height - 160);
       break;
     }
   }
@@ -181,7 +185,13 @@ public class Window extends PApplet{
 
   }
 
-  int calculateTotalScore() {
+  // turn = false means player1's turn.
+  // turn = true means player2's turn.
+  boolean getTurn() {
+    return this.turn;
+  }
+
+  int calculateTotalScore(int winner) {
     // + 50 : if one player's cannonball hits other player
     // + 5 : if one player's cannonball breaks obstacle in the air
     // final score calculation logic
@@ -190,28 +200,32 @@ public class Window extends PApplet{
     // 3) plus current score
     int turnScore = 0;
     int hpScore = 0;
+    int finalScore = 0;
 
     switch(winner) {
       case 1:
-//        leftPlayer.score +=
+        leftPlayer.score += (100 - this.turnCnt);
+        leftPlayer.score += (leftPlayer.getHp() - rightPlayer.getHp());
+        finalScore = leftPlayer.score;
         break;
       case 2:
+        rightPlayer.score += (100 - this.turnCnt);
+        rightPlayer.score += (rightPlayer.getHp() - leftPlayer.getHp());
+        finalScore = rightPlayer.score;
         break;
       default:
         break;
     }
 
-//    finalscore =
     return 0;
   }
-
 
   void updateMsgBox() {
     String rnd = "<Round: " + this.turnCnt + ">";
     if (!this.turn) {
       fill(206, 254, 238);
       text(rnd, this.width - 800 ,this.height - 100);
-      text("Player1's turn",this.width - 800 ,this.height - 80 );
+      text(player1Name + "'s turn",this.width - 800 ,this.height - 80 );
       fill(255, 255, 204);
       text("Move your tank by LEFT/RIGHT key",this.width - 800 ,this.height - 60 );
       text("Set the angle with by UP/DOWN key",this.width - 800 ,this.height - 40 );
@@ -219,7 +233,7 @@ public class Window extends PApplet{
     } else {
       fill(206, 254, 238);
       text(rnd, this.width - 800 ,this.height - 100);
-      text("Player2's turn",this.width - 800 ,this.height - 80 );
+      text(player2Name + "'s turn",this.width - 800 ,this.height - 80 );
       fill(255, 255, 204);
       text("Move your tank by LEFT/RIGHT key",this.width - 800 ,this.height - 60 );
       text("Set the angle with by UP/DOWN key",this.width - 800 ,this.height - 40 );
@@ -315,6 +329,12 @@ public class Window extends PApplet{
   public void settings() {
     size(this.width, this.height);
     img = loadImage("title.jpg");
+    Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+    System.out.println("\n\nPlease Enter player 1's name: ");
+    player1Name = myObj.nextLine();
+    System.out.println("Please Enter player 2's name: ");
+    player2Name = myObj.nextLine();
+    myObj.close();
 
     // Initialize obstacles
     for (int i = 0; i < numberOfObstacles / 2; i++) {
@@ -343,6 +363,11 @@ public class Window extends PApplet{
       }
       return;
     }
+//    if (keyPressed) {
+//      if ((key == 'z' || key == 'Z') && (cheatMode)){
+//        println("B pressed");
+//      }
+//    }
     switch (event.getKeyCode()) {
       case RIGHT:
         currentPlayer.move(5);
@@ -363,7 +388,6 @@ public class Window extends PApplet{
       case ENTER:
         this.ballMove = true;
         currentPlayer.fire(currentPlayer, ball, this);
-//        this.ballMove = false;
         break;
       case BACKSPACE:
         if (cheatMode)
@@ -376,9 +400,9 @@ public class Window extends PApplet{
       case TAB:
         currentPlayer.changeTurn(currentPlayer, this);
         break;
-      case CONTROL:
-        break;
       case ALT:
+        break;
+      case CONTROL:
         this.cheatMode = !this.cheatMode;
         break;
       default:
