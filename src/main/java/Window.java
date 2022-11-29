@@ -239,10 +239,10 @@ public class Window extends PApplet{
       fill(255, 80, 1);
       if (!this.turn) {
         text("Fuel is empty!", 100, this.height - 30);
-        text("Press ENTER to turn over.", 100, this.height - 10);
+        currentPlayer.changeTurn(currentPlayer, this);
       } else {
         text("Fuel is empty!", this.width - 250, this.height - 30);
-        text("Press ENTER to turn over.", this.width - 250, this.height - 10);
+        currentPlayer.changeTurn(currentPlayer, this);
       }
     } else if (currentPlayer.getFuel() < 30) {
       fill(255, 80, 1);

@@ -29,6 +29,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     } else {
       xPos = getPosition().x + direction;
     }
+    // TODO Implement the player's movement into wall
     PVector temp = new PVector(xPos, yPos);
     this.setPosition(temp);
   }
