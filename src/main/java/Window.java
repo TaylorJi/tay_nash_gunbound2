@@ -75,9 +75,9 @@ public class Window extends PApplet{
   }
 
   public void draw() {
-//    if (this.title) {
-//      showTitle();
-//    }
+    if (this.title) {
+      showTitle();
+    }
     if (!this.turn) {
       currentPlayer = leftPlayer;
     } else {
@@ -132,7 +132,7 @@ public class Window extends PApplet{
   }
 
   public void showTitle() {
-    image(img, 35, 0);
+    image(this.img, 35, 0);
     try {
       TimeUnit.SECONDS.sleep(5);
     } catch (InterruptedException e) {
@@ -371,9 +371,9 @@ public class Window extends PApplet{
       ));
       obstacleVector.add(new PVector(random(width), random(height - 250)));
     }
-    collidables.add(wall);
     collidables.add(leftPlayer);
     collidables.add(rightPlayer);
+    collidables.add(wall);
   }
   @Override
   public void keyPressed(KeyEvent event) {
