@@ -1,5 +1,4 @@
 import processing.core.PApplet;
-import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
@@ -116,14 +115,28 @@ public class Window extends PApplet{
       this.winner = 1;
     }
     calculateTotalScore(this.winner);
+    drawLeaderBoard();
   }
 
   public void gameOverMsg(String player) {
-    textSize(100);
-    rect(200, this.height - 500, 900, this.height - 500);
+    textSize(60);
+    rect(200, this.height - 700, 900, this.height - 500);
     fill(3, 253, 247);
-    text(player + " won!", 200, this.height - 400);
-    text("Press ESC key to quit.", 200, this.height - 300);
+    text(player + " won!", 350, this.height - 650);
+    text("Press ESC key to quit.", 500, this.height - 600);
+  }
+
+  public void drawLeaderBoard() {
+    textSize(30);
+    rect(200, this.height - 550, 900, this.height - 300);
+    fill(0, 0, 0);
+    text("Ranking               Name                   Score", 300, this.height - 500);
+
+    text("No1", 310, this.height - 450);
+    text("No2", 310, this.height - 420);
+    text("No3", 310, this.height - 390);
+    text("No4", 310, this.height - 360);
+    text("No5", 310, this.height - 330);
   }
 
   public void showTitle() {
@@ -165,14 +178,10 @@ public class Window extends PApplet{
       case 0:
         fill(0, 0, 0);
         text("<Test Mode>", this.width - 600, this.height - 100);
-//        text("Z: increase my HP", this.width - 600, this.height - 180);
-//        text("X: increase my FUEL", this.width - 600, this.height - 160);
       break;
       case 1:
         fill(127, 127, 127);
         text("<Test Mode>", this.width - 600, this.height - 100);
-//        text("Z: increase my HP", this.width - 600, this.height - 180);
-//        text("X: increase my FUEL", this.width - 600, this.height - 160);
       break;
     }
   }
@@ -183,7 +192,6 @@ public class Window extends PApplet{
     fill(255, 255, 204);
     text(lscore, 150, this.height - 100);
     text(rscore, this.width - 200, this.height - 100);
-
   }
 
   // turn = false means player1's turn.
@@ -203,19 +211,16 @@ public class Window extends PApplet{
 
     switch (winner) {
       case 1:
-        leftPlayer.score += (100 - this.turnCnt);
-        leftPlayer.score += (leftPlayer.getHp() - rightPlayer.getHp());
-        finalScore = leftPlayer.score;
+        finalScore = leftPlayer.score + (100 - this.turnCnt);
+        finalScore += leftPlayer.score + (leftPlayer.getHp() - rightPlayer.getHp());
         break;
       case 2:
-        rightPlayer.score += (100 - this.turnCnt);
-        rightPlayer.score += (rightPlayer.getHp() - leftPlayer.getHp());
-        finalScore = rightPlayer.score;
+        finalScore = rightPlayer.score += (100 - this.turnCnt);;
+        finalScore += rightPlayer.score += (rightPlayer.getHp() - leftPlayer.getHp());
         break;
       default:
         break;
     }
-
     return finalScore;
   }
 
@@ -267,7 +272,7 @@ public class Window extends PApplet{
     }
   }
 
-  private void showGuide(String rnd, String player) {
+  public void showGuide(String rnd, String player) {
     fill(206, 254, 238);
     text(rnd, this.width - 800 ,this.height - 100);
     text(player + "'s turn",this.width - 800 ,this.height - 80 );
@@ -290,12 +295,11 @@ public class Window extends PApplet{
   public void drawHpForPlayer(Player player) {
     if (player.getHp() >= 100) {
       this.fill(0, 204, 0);
-    } else if ((player.getFuel() < 100) && (player.getFuel() >= 30)) {
+    } else if ((player.getHp() < 100) && (player.getHp() >= 30)) {
       this.fill(249, 227, 41);
-    } else if (player.getFuel() < 30) {
+    } else if (player.getHp() < 30) {
       this.fill(246, 0, 0);
     }
-    this.rect(this.width - 240, this.height - 70, rightPlayer.getHp(), 10);
   }
 
   public void drawFuel() {
@@ -393,9 +397,12 @@ public class Window extends PApplet{
       if ((key == 'x' || key == 'X') && (cheatMode)){
         currentPlayer.decreaseFuel(-10);
       }
-//      if ((key == 'a' || key == 'A') && (cheatMode)){
-//        currentPlayer.decreaseFuel(-10);
-//      }
+      if ((key == 's' || key == 'S') && (cheatMode)){
+        currentPlayer.decreaseFuel(10);
+      }
+      if ((key == 'a' || key == 'A') && (cheatMode)){
+        currentPlayer.setHp(10);
+      }
     }
     switch (event.getKeyCode()) {
       case RIGHT:
@@ -424,16 +431,7 @@ public class Window extends PApplet{
         ball.setDirection(currentPlayer.angleDirection);
         this.ballMove = true;
         currentPlayer.fire(currentPlayer, ball, this);
-//        this.ballMove = false;
         break;
-//      case BACKSPACE:
-//        if (cheatMode)
-//          currentPlayer.setHp(-10);
-//        break;
-//      case DELETE:
-//        if (cheatMode)
-//          currentPlayer.decreaseFuel(-10);
-//        break;
       case TAB:
         if (!ballMove) {
           currentPlayer.changeTurn(currentPlayer, this);
