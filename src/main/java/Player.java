@@ -14,7 +14,9 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   protected float fuel = 100.0F;
 
   protected int score = 0;
+
   protected PVector angleDirection = new PVector(1,1).normalize();
+
 
   public Player(PVector position, Window window) {
     super(position, window);
@@ -29,16 +31,16 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     } else {
       xPos = getPosition().x + direction;
     }
-    boolean turn = window.getTurn();
-    if ((turn == false) && (!window.cheatMode)){
-      if ((xPos + direction + 30) >= (window.width / 2)) {
-        xPos = getPosition().x;
-      }
-    } else if ((turn == true) && (!window.cheatMode)) {
-      if ((xPos + direction) <= (window.width / 2)) {
-        xPos = getPosition().x;
-      }
-    }
+//    boolean turn = window.getTurn();
+//    if ((turn == false) && (!window.cheatMode)){
+//      if ((xPos + direction + 30) >= (window.wallPosition.x)) {
+//        xPos = getPosition().x;
+//      }
+//    } else if ((turn == true) && (!window.cheatMode)) {
+//      if ((xPos + direction) <= (window.wallPosition.x)) {
+//        xPos = getPosition().x;
+//      }
+//    }
     this.setPosition(new PVector(xPos, yPos));
   }
 
@@ -58,7 +60,6 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void changeTurn(Player currentPlayer, Window window) {
     currentPlayer.setFuel(100.0F);
     window.turn = !window.turn;
-    window.turnCnt++;
   }
   @Override
   public void collide() {
@@ -73,10 +74,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void setHp(int hp) {
     this.hp -= hp;
     if(this.hp <= 0) {
-      this.hp = 0;
-    }
-    if(this.hp > 200) {
-      this.hp = 200;
+    this.hp = 0;
     }
   }
 
@@ -94,7 +92,6 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void decreaseFuel(float fuel) {
     this.fuel -= fuel;
     if (this.fuel <= 0) this.fuel = 0;
-    if (this.fuel >= 200) this.fuel = 200;
   }
 
   @Override
@@ -109,6 +106,9 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public PVector getAngleVector(Player currentPlayer) {
     return currentPlayer.angleDirection;
   }
+
+
+  public void setScore (int score) {this.score += score;}
 
   @Override
   public void setPosition(PVector position) {
@@ -153,9 +153,6 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   @Override
   public void collideBehaviour(ICollidable c) {
-    if (c instanceof CannonBall) {
-      setHp(10);
-    }
 
   }
 }

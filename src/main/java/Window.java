@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
@@ -57,6 +58,8 @@ public class Window extends PApplet{
   // player 2 won: 2
   protected int winner = 0;
 
+  protected DBTest dbTest;
+
 
   public void registerOnEventListener(OnEventListner mListener) {
     this.mListener = mListener;
@@ -108,6 +111,7 @@ public class Window extends PApplet{
 
   public void gameOver() {
     if (leftPlayer.getHp() == 0) {
+      dbTest = new DBTest();
       gameOverMsg(player2Name);
       this.winner = 2;
     } else if (rightPlayer.getHp() == 0) {
