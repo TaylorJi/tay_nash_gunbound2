@@ -240,10 +240,22 @@ public class Window extends PApplet{
       fill(255, 80, 1);
       if (!this.turn) {
         text("Fuel is empty!", 100, this.height - 30);
-        currentPlayer.changeTurn(currentPlayer, this);
+        this.currentPlayer.changeTurn(this.currentPlayer, this);
+        if (!this.turn) {
+          this.currentPlayer = this.leftPlayer;
+        } else {
+          this.currentPlayer = this.rightPlayer;
+        }
+        ball.position = this.currentPlayer.position;
       } else {
         text("Fuel is empty!", this.width - 250, this.height - 30);
-        currentPlayer.changeTurn(currentPlayer, this);
+        this.currentPlayer.changeTurn(this.currentPlayer, this);
+        if (!this.turn) {
+          this.currentPlayer = this.leftPlayer;
+        } else {
+          this.currentPlayer = this.rightPlayer;
+        }
+        ball.position = this.currentPlayer.position;
       }
     } else if (currentPlayer.getFuel() < 30) {
       fill(255, 80, 1);
