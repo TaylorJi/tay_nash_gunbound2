@@ -74,9 +74,11 @@ public class Window extends PApplet{
   }
 
   public void draw() {
-    if (this.title) {
-      showTitle();
-    }
+//    if (this.title) {
+//      showTitle();
+//    }
+//    image(img,0,0);
+
     if (!this.turn) {
       currentPlayer = leftPlayer;
     } else {
@@ -349,7 +351,6 @@ public class Window extends PApplet{
 
   public void settings() {
     size(this.width, this.height);
-    img = loadImage("title.jpg");
     Scanner myObj = new Scanner(System.in);
     System.out.println("\n\nPlease Enter player 1's name: ");
     player1Name = myObj.nextLine();
