@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
@@ -13,10 +14,8 @@ public class Window extends PApplet{
   protected static final int CIRCLE = 2;
   protected static final int RECT = 3;
 
-  protected PVector tempPos = new PVector(50, this.height + 500);
   protected PVector tempDir = new PVector(1f, -1f).normalize();
 
-  protected CannonBall ball = new CannonBall(tempPos, tempDir,this);
   protected int width = 1280;
   protected int height = 720;
 
@@ -33,14 +32,15 @@ public class Window extends PApplet{
 
   protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
-  protected Player currentPlayer;
+  protected Player currentPlayer = leftPlayer;
+  protected CannonBall ball = new CannonBall(currentPlayer.position, tempDir,this);
   protected PVector wallPosition = new PVector((float)this.width / 2, this.dashboardHeight);
 
   protected int numberOfObstacles = 40;
-  protected Obstacle wall = new Obstacle(1,false);
+  protected Obstacle wall = new Obstacle(1, false, wallPosition);
 //  protected Obstacle obstacle = new Obstacle(10, true);
 
-  protected ArrayList<Obstacle> obstacle = new ArrayList<>();
+  protected ArrayList<ICollidable> collidables = new ArrayList<>();
 //  PVector circleVector = new PVector(random(this.height), random(this.width));
 
   protected ArrayList<PVector> obstacleVector = new ArrayList<>();
@@ -83,22 +83,24 @@ public class Window extends PApplet{
     background(10);
     leftPlayer.draw(this);
     rightPlayer.draw(this);
-    ball.draw(currentPlayer.position, this);
+    ball.draw(ball.position, this);
     if(ballMove) {
-      ball.move(currentPlayer,this);
+      ball.move(currentPlayer, this);
     }
     drawAngle(currentPlayer, currentPlayer.angleDirection);
     drawDashboard();
     drawHp();
     drawFuel();
     wall.draw(WALL, wallPosition, obstacleSize, this);
-    for (int i = 0; i <numberOfObstacles / 2; i++) {
+    for (int i = 0; i < numberOfObstacles / 2; i++) {
       this.obstacleSize = 30;
-      obstacle.get(i).draw(CIRCLE, obstacleVector.get(i),obstacleSize ,this);
+      Obstacle curr = (Obstacle) collidables.get(i);
+      curr.draw(CIRCLE, curr.position, obstacleSize ,this);
     }
-    for (int i = numberOfObstacles / 2; i <numberOfObstacles; i++) {
+    for (int i = numberOfObstacles / 2; i < numberOfObstacles; i++) {
       this.obstacleSize = 10;
-      obstacle.get(i).draw(RECT, obstacleVector.get(i),obstacleSize ,this);
+      Obstacle curr = (Obstacle) collidables.get(i);
+      curr.draw(RECT, curr.position, obstacleSize ,this);
     }
     if ((leftPlayer.getHp() == 0) || (rightPlayer.getHp() == 0)) {
       gameOver();
@@ -281,6 +283,7 @@ public class Window extends PApplet{
     } else if (player.getFuel() < 30) {
       this.fill(246, 0, 0);
     }
+    this.rect(this.width - 240, this.height - 70, rightPlayer.getHp(), 10);
   }
 
   public void drawFuel() {
@@ -301,6 +304,7 @@ public class Window extends PApplet{
     } else if (player.getFuel() < 30) {
       this.fill(246, 0, 0);
     }
+    this.rect(this.width - 240, this.height - 40, rightPlayer.getFuel(), 10);
   }
 
   public void drawAngle(Player player, PVector angleDirection) {
@@ -310,9 +314,15 @@ public class Window extends PApplet{
     yPos = player.getPosition().y;
     this.stroke(255,179,179);
     if (!this.turn) {
-      this.line(xPos + player.width, yPos, xPos + (angleDirection.x) * 50, yPos - (angleDirection.y) * 50);
+      currentPlayer = leftPlayer;
     } else {
-      this.line(xPos, yPos, xPos - angleDirection.x * 40, yPos - angleDirection.y * 40);
+      currentPlayer = rightPlayer;
+    }
+
+    if (player ==leftPlayer) {
+      this.line(xPos, yPos, xPos + (angleDirection.x * 50), yPos - (angleDirection.y) * 50);
+    } else {
+      this.line(xPos + player.width, yPos, xPos - (angleDirection.x * 50), yPos - (angleDirection.y) * 80);
     }
     this.stroke(0);
   }
@@ -329,13 +339,24 @@ public class Window extends PApplet{
 
     // Initialize obstacles
     for (int i = 0; i < numberOfObstacles / 2; i++) {
-      obstacle.add(new Obstacle(1,true));
+      collidables.add(new Obstacle(
+              1,
+              true,
+              new PVector((random(width)), random(height - 250))
+      ));
       obstacleVector.add(new PVector(random(width), random(height - 250)));
     }
     for (int i = numberOfObstacles / 2; i < numberOfObstacles; i++) {
-      obstacle.add(new Obstacle(1,false));
+      collidables.add(new Obstacle(
+              1,
+              false,
+              new PVector((random(width)), random(height - 250))
+      ));
       obstacleVector.add(new PVector(random(width), random(height - 250)));
     }
+    collidables.add(wall);
+    collidables.add(leftPlayer);
+    collidables.add(rightPlayer);
   }
   @Override
   public void keyPressed(KeyEvent event) {
@@ -366,24 +387,32 @@ public class Window extends PApplet{
     }
     switch (event.getKeyCode()) {
       case RIGHT:
-        currentPlayer.move(5);
-        currentPlayer.decreaseFuel(2);
+        if (!ballMove) {
+          currentPlayer.move(5);
+          currentPlayer.decreaseFuel(2);
+          ball.position.x += 5;
+        }
         break;
       case LEFT:
-        currentPlayer.move(-5);
-        currentPlayer.decreaseFuel(2);
+        if (!ballMove) {
+          currentPlayer.move(-5);
+          currentPlayer.decreaseFuel(2);
+          ball.position.x -= 5;
+        }
         break;
       case UP:
-        currentPlayer.setAngle(currentPlayer, 0.005F);
+        currentPlayer.setAngle(currentPlayer, 0.006F);
         currentPlayer.decreaseFuel(0.1F);
         break;
       case DOWN:
-        currentPlayer.setAngle(currentPlayer, -0.005F);
+        currentPlayer.setAngle(currentPlayer, -0.006F);
         currentPlayer.decreaseFuel(0.1F);
         break;
       case ENTER:
+        ball.setDirection(currentPlayer.angleDirection);
         this.ballMove = true;
         currentPlayer.fire(currentPlayer, ball, this);
+//        this.ballMove = false;
         break;
 //      case BACKSPACE:
 //        if (cheatMode)
@@ -394,7 +423,15 @@ public class Window extends PApplet{
 //          currentPlayer.decreaseFuel(-10);
 //        break;
       case TAB:
-        currentPlayer.changeTurn(currentPlayer, this);
+        if (!ballMove) {
+          currentPlayer.changeTurn(currentPlayer, this);
+          if (!this.turn) {
+            currentPlayer = leftPlayer;
+          } else {
+            currentPlayer = rightPlayer;
+          }
+          ball.position = currentPlayer.position;
+        }
         break;
       case CONTROL:
         this.cheatMode = !this.cheatMode;

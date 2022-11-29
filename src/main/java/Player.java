@@ -39,8 +39,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
         xPos = getPosition().x;
       }
     }
-    PVector temp = new PVector(xPos, yPos);
-    this.setPosition(temp);
+    this.setPosition(new PVector(xPos, yPos));
   }
 
   @Override
@@ -74,7 +73,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void setHp(int hp) {
     this.hp -= hp;
     if(this.hp <= 0) {
-    this.hp = 0;
+      this.hp = 0;
     }
     if(this.hp > 200) {
       this.hp = 200;
@@ -154,6 +153,9 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
 
   @Override
   public void collideBehaviour(ICollidable c) {
+    if (c instanceof CannonBall) {
+      setHp(10);
+    }
 
   }
 }
