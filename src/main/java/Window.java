@@ -1,9 +1,19 @@
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Sorts;
+import org.bson.Document;
+
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +66,23 @@ public class Window extends PApplet{
   // player 2 won: 2
   protected int winner = 0;
 
-  protected DBTest dbTest;
+  // MongoDB for leaderboard,
+  private final String conStr = "mongodb+srv://admin1:123@cluster0.dmvywtj.mongodb.net/?retryWrites=true&w=majority";
+
+  private final MongoClient mongoClient = MongoClients.create(
+          MongoClientSettings.builder()
+                  .applyConnectionString(
+                          new ConnectionString(
+                                  conStr
+                          )
+                  )
+                  .retryWrites(true)
+                  .build()
+  );
+  private final MongoCollection collection = mongoClient.
+          getDatabase("app").
+          getCollection("ranking");
+
 
 
   public void registerOnEventListener(OnEventListner mListener) {
@@ -108,16 +134,26 @@ public class Window extends PApplet{
   }
 
   public void gameOver() {
+    String winnerName = "";
     if (leftPlayer.getHp() == 0) {
-      dbTest = new DBTest();
-      gameOverMsg(player2Name);
       this.winner = 2;
-
+      winnerName = player2Name;
     } else if (rightPlayer.getHp() == 0) {
-      gameOverMsg(player1Name);
       this.winner = 1;
+      winnerName = player1Name;
     }
-    calculateTotalScore(this.winner);
+
+    int finalScore = calculateTotalScore(this.winner);
+
+    // record winner to the db
+    collection.insertOne(new Document()
+            .append("userName", winnerName)
+            .append("score", finalScore)
+    );
+
+    // draw game over message for winner with the score if in the top 5
+    gameOverMsg(winnerName);
+    noLoop();
   }
 
   public void gameOverMsg(String player) {
@@ -126,6 +162,16 @@ public class Window extends PApplet{
     fill(3, 253, 247);
     text(player + " won!", 200, this.height - 400);
     text("Press ESC key to quit.", 200, this.height - 300);
+
+    // query the 5th highest score (or at least the range)
+    List<Document> col = new ArrayList<>();
+    collection.find().sort(Sorts.descending("score")).limit(5).into(col);
+    for (int i = 0; i < col.size(); i++) {
+      String name = (String) col.get(i).get("userName");
+      int playerScore = Integer.parseInt(col.get(i).get("score").toString());
+      System.out.println("name: " + name + " score: " + playerScore);
+    }
+
   }
 
   public void showTitle() {
