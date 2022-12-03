@@ -65,7 +65,7 @@ public class Window extends PApplet{
   // player 2 won: 2
   protected int winner = 0;
 
-  // MongoDB for leaderboard,
+  // MongoDB for leaderboard, connected based on IP address
   private final String conStr = "mongodb+srv://admin1:123@cluster0.dmvywtj.mongodb.net/?retryWrites=true&w=majority";
 
   private final MongoClient mongoClient = MongoClients.create(

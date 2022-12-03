@@ -46,13 +46,18 @@ public class CannonBall implements IMovable, ICollidable{
     this.relativePosition = new PVector(0,0);
   }
 
-
+  /**
+   * This method reset the ball's position to 0,0
+   */
   public void resetBall() {
     window.ballMove = false;
     setRelativeXPos(0);
     setRelativeYPos(0);
   }
 
+  /**
+   * This method triggers collied behaviour based on the obstacle
+   */
   public void didHitObstacle() {
     for (ICollidable each : window.collidables) {
       if (collided(each)) {
@@ -68,6 +73,11 @@ public class CannonBall implements IMovable, ICollidable{
     }
   }
 
+  /**
+   * This method checks if the ball is out of bounds
+   * @param window happens inside the window
+   * @return true when the ball insinde the window, false when it is not
+   */
 
   public boolean OutOfBounds(Window window) {
     if (window.currentPlayer == window.leftPlayer)
@@ -84,6 +94,14 @@ public class CannonBall implements IMovable, ICollidable{
   }
 
 
+  /**
+   * Proper ballmovment method.
+   * If I had more time, I would implement the proper physics that contains gravity.
+   * The code is written in hard-coded way.
+   * Simply implemented the gravity by decreasing y-direction.
+   * @param currentPlayer is used for setting up the ball position
+   * @param window is used for happening inside the window
+   */
   public void move(Player currentPlayer, Window window) {
     System.out.println("x" + this.relativePosition.x);
     System.out.println("y" + this.relativePosition.y);
@@ -125,10 +143,20 @@ public class CannonBall implements IMovable, ICollidable{
 
 
 
+  /**
+   * This method gets the radious of the Cannonball
+   * @return this ball's radius.
+   */
   public float getRadius() {
     return this.radious;
   }
 
+
+  /**
+   * This method checks if the ball collies with collidable objects
+   * @param c for ICollidialbe objects
+   * @return true when the ball hits the object
+   */
   @Override
   public boolean collided(ICollidable c) {
     float xPos = this.position.x + this.getRadius() + this.relativePosition.x;
@@ -187,6 +215,10 @@ public class CannonBall implements IMovable, ICollidable{
     return false;
   }
 
+  /**
+   * This method gets the width of the ball
+   * @return
+   */
   @Override
   public float getWidth() {
     return this.width;
@@ -206,6 +238,15 @@ public class CannonBall implements IMovable, ICollidable{
     this.direction.y = direction.y;
   }
 
+  /**
+   * This method triggers different collide behavioural based
+   * on the hit object.
+   * If the ball hits the breakable obstacles, then player gets 5 point,
+   * if the ball hits the unbreakble obstacles, lose 10 point
+   * if the ball hits the player, the player who just shot the ball will get
+   * 50 point.
+   * @param c for getting collidable objects
+   */
   @Override
   public void collideBehaviour(ICollidable c) {
     System.out.println("collided");
