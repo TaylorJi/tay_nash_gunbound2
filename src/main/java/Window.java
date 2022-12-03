@@ -1,5 +1,4 @@
 import processing.core.PApplet;
-import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
@@ -39,10 +38,8 @@ public class Window extends PApplet{
 
   protected int numberOfObstacles = 40;
   protected Obstacle wall = new Obstacle(1, false, wallPosition);
-//  protected Obstacle obstacle = new Obstacle(10, true);
 
   protected ArrayList<ICollidable> collidables = new ArrayList<>();
-//  PVector circleVector = new PVector(random(this.height), random(this.width));
 
   protected ArrayList<PVector> obstacleVector = new ArrayList<>();
   private OnEventListner mListener;
@@ -167,18 +164,14 @@ public class Window extends PApplet{
 
   void cheatModeOn(int option) {
     switch (option) {
-      case 0:
+      case 0 -> {
         fill(0, 0, 0);
         text("<Test Mode>", this.width - 600, this.height - 100);
-//        text("Z: increase my HP", this.width - 600, this.height - 180);
-//        text("X: increase my FUEL", this.width - 600, this.height - 160);
-        break;
-      case 1:
+      }
+      case 1 -> {
         fill(127, 127, 127);
         text("<Test Mode>", this.width - 600, this.height - 100);
-//        text("Z: increase my HP", this.width - 600, this.height - 180);
-//        text("X: increase my FUEL", this.width - 600, this.height - 160);
-        break;
+      }
     }
   }
 
@@ -207,18 +200,18 @@ public class Window extends PApplet{
     int finalScore = 0;
 
     switch (winner) {
-      case 1:
+      case 1 -> {
         leftPlayer.score += (100 - this.turnCnt);
         leftPlayer.score += (leftPlayer.getHp() - rightPlayer.getHp());
         finalScore = leftPlayer.score;
-        break;
-      case 2:
+      }
+      case 2 -> {
         rightPlayer.score += (100 - this.turnCnt);
         rightPlayer.score += (rightPlayer.getHp() - leftPlayer.getHp());
         finalScore = rightPlayer.score;
-        break;
-      default:
-        break;
+      }
+      default -> {
+      }
     }
 
     return finalScore;
@@ -398,9 +391,6 @@ public class Window extends PApplet{
       if ((key == 'x' || key == 'X') && (cheatMode)){
         currentPlayer.decreaseFuel(-10);
       }
-//      if ((key == 'a' || key == 'A') && (cheatMode)){
-//        currentPlayer.decreaseFuel(-10);
-//      }
     }
     switch (event.getKeyCode()) {
       case RIGHT:
@@ -429,16 +419,7 @@ public class Window extends PApplet{
         ball.setDirection(currentPlayer.angleDirection);
         this.ballMove = true;
         currentPlayer.fire(currentPlayer, ball, this);
-//        this.ballMove = false;
         break;
-//      case BACKSPACE:
-//        if (cheatMode)
-//          currentPlayer.setHp(-10);
-//        break;
-//      case DELETE:
-//        if (cheatMode)
-//          currentPlayer.decreaseFuel(-10);
-//        break;
       case TAB:
         if (!ballMove) {
           currentPlayer.changeTurn(currentPlayer, this);
