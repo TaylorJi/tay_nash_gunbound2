@@ -74,10 +74,10 @@ public class Window extends PApplet{
   }
 
   public void draw() {
-//    if (this.title) {
-//      showTitle();
-//    }
-//    image(img,0,0);
+    if (this.title) {
+      showTitle();
+    }
+    image(img,0,0);
 
     if (!this.turn) {
       currentPlayer = leftPlayer;
