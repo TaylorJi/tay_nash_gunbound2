@@ -28,7 +28,6 @@ public class Window extends PApplet{
   protected int width = 1280;
   protected int height = 720;
 
-
   // turn = false means player1's turn.
   // turn = true means player2's turn.
   protected boolean turn = false;
@@ -172,7 +171,6 @@ public class Window extends PApplet{
       int playerScore = Integer.parseInt(col.get(i).get("score").toString());
       System.out.println("name: " + name + " score: " + playerScore);
     }
-
   }
 
   public void showTitle() {
@@ -260,7 +258,6 @@ public class Window extends PApplet{
       default -> {
       }
     }
-
     return finalScore;
   }
 
