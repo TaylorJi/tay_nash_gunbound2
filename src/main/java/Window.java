@@ -40,7 +40,7 @@ public class Window extends PApplet{
   protected String player1Name;
   protected String player2Name;
 
-  protected Player leftPlayer = new Player(new PVector(width -200,this.height - 200), this);
+  protected Player leftPlayer = new Player(new PVector(50,this.height - 200), this);
   protected Player rightPlayer = new Player(new PVector(width - 100,this.height - 200), this);
   protected Player currentPlayer = leftPlayer;
   protected CannonBall ball = new CannonBall(currentPlayer.position, tempDir,this);
@@ -119,12 +119,12 @@ public class Window extends PApplet{
     drawFuel();
     wall.draw(WALL, wallPosition, obstacleSize, this);
     for (int i = 0; i < numberOfObstacles / 2; i++) {
-      this.obstacleSize = 30;
+      this.obstacleSize = 10;
       Obstacle curr = (Obstacle) collidables.get(i);
       curr.draw(CIRCLE, curr.position, obstacleSize ,this);
     }
     for (int i = numberOfObstacles / 2; i < numberOfObstacles; i++) {
-      this.obstacleSize = 10;
+      this.obstacleSize = 5;
       Obstacle curr = (Obstacle) collidables.get(i);
       curr.draw(RECT, curr.position, obstacleSize ,this);
     }
@@ -136,6 +136,7 @@ public class Window extends PApplet{
   public void gameOver() {
     String winnerName = "";
     if (leftPlayer.getHp() == 0) {
+      gameOverMsg(player2Name);
       this.winner = 2;
       winnerName = player2Name;
     } else if (rightPlayer.getHp() == 0) {
@@ -157,11 +158,11 @@ public class Window extends PApplet{
   }
 
   public void gameOverMsg(String player) {
-    textSize(100);
-    rect(200, this.height - 500, 900, this.height - 500);
+    textSize(60);
+    rect(200, this.height - 700, 900, this.height - 500);
     fill(3, 253, 247);
-    text(player + " won!", 200, this.height - 400);
-    text("Press ESC key to quit.", 200, this.height - 300);
+    text(player + " won!", 350, this.height - 650);
+    text("Press ESC key to quit.", 500, this.height - 600);
 
     // query the 5th highest score (or at least the range)
     List<Document> col = new ArrayList<>();
@@ -311,7 +312,7 @@ public class Window extends PApplet{
     }
   }
 
-  private void showGuide(String rnd, String player) {
+  public void showGuide(String rnd, String player) {
     fill(206, 254, 238);
     text(rnd, this.width - 800 ,this.height - 100);
     text(player + "'s turn",this.width - 800 ,this.height - 80 );
@@ -334,12 +335,11 @@ public class Window extends PApplet{
   public void drawHpForPlayer(Player player) {
     if (player.getHp() >= 100) {
       this.fill(0, 204, 0);
-    } else if ((player.getFuel() < 100) && (player.getFuel() >= 30)) {
+    } else if ((player.getHp() < 100) && (player.getHp() >= 30)) {
       this.fill(249, 227, 41);
-    } else if (player.getFuel() < 30) {
+    } else if (player.getHp() < 30) {
       this.fill(246, 0, 0);
     }
-    this.rect(this.width - 240, this.height - 70, rightPlayer.getHp(), 10);
   }
 
   public void drawFuel() {
@@ -436,6 +436,12 @@ public class Window extends PApplet{
       }
       if ((key == 'x' || key == 'X') && (cheatMode)){
         currentPlayer.decreaseFuel(-10);
+      }
+      if ((key == 's' || key == 'S') && (cheatMode)){
+        currentPlayer.decreaseFuel(10);
+      }
+      if ((key == 'a' || key == 'A') && (cheatMode)){
+        currentPlayer.setHp(10);
       }
     }
     switch (event.getKeyCode()) {

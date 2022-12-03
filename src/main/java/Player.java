@@ -31,16 +31,16 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
     } else {
       xPos = getPosition().x + direction;
     }
-//    boolean turn = window.getTurn();
-//    if ((turn == false) && (!window.cheatMode)){
-//      if ((xPos + direction + 30) >= (window.wallPosition.x)) {
-//        xPos = getPosition().x;
-//      }
-//    } else if ((turn == true) && (!window.cheatMode)) {
-//      if ((xPos + direction) <= (window.wallPosition.x)) {
-//        xPos = getPosition().x;
-//      }
-//    }
+    boolean turn = window.getTurn();
+    if ((turn == false) && (!window.cheatMode)){
+      if ((xPos + direction + 30) >= (window.width/2)) {
+        xPos = getPosition().x;
+      }
+    } else if ((turn == true) && (!window.cheatMode)) {
+      if ((xPos + direction) <= (window.width/2)) {
+        xPos = getPosition().x;
+      }
+    }
     this.setPosition(new PVector(xPos, yPos));
   }
 
@@ -74,7 +74,10 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void setHp(int hp) {
     this.hp -= hp;
     if(this.hp <= 0) {
-    this.hp = 0;
+      this.hp = 0;
+    }
+    if(this.hp >= 200) {
+      this.hp = 200;
     }
   }
 
@@ -92,6 +95,7 @@ public class Player extends AbstractPlayer implements ICollidable, IMovable {
   public void decreaseFuel(float fuel) {
     this.fuel -= fuel;
     if (this.fuel <= 0) this.fuel = 0;
+    if (this.fuel >=200) this.fuel = 200;
   }
 
   @Override
