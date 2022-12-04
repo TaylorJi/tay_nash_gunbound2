@@ -103,8 +103,6 @@ public class CannonBall implements IMovable, ICollidable{
    * @param window is used for happening inside the window
    */
   public void move(Player currentPlayer, Window window) {
-    System.out.println("x" + this.relativePosition.x);
-    System.out.println("y" + this.relativePosition.y);
 
     if (currentPlayer == window.leftPlayer) {
       ballOutOfBound(window);

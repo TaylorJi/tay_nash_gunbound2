@@ -65,6 +65,8 @@ public class Window extends PApplet{
   // player 2 won: 2
   protected int winner = 0;
 
+  private int finalScore = 0;
+
   // MongoDB for leaderboard, connected based on IP address
   private final String conStr = "mongodb+srv://admin1:123@cluster0.dmvywtj.mongodb.net/?retryWrites=true&w=majority";
 
@@ -157,11 +159,14 @@ public class Window extends PApplet{
   }
 
   public void gameOverMsg(String player) {
-    textSize(60);
-    rect(200, this.height - 700, 900, this.height - 500);
+    textSize(50);
+    rect(200, this.height - 700, 900, this.height - 200);
     fill(3, 253, 247);
-    text(player + " won!", 350, this.height - 650);
-    text("Press ESC key to quit.", 500, this.height - 600);
+    text(player + " won!", 210, this.height - 650);
+    text(player + " score is " + this.finalScore, 210, this.height-600);
+    text("Press ESC key to quit.", 210, this.height - 550);
+    text("Top 5 Players", 210, this.height - 500);
+    System.out.println(this.finalScore);
 
     // query the 5th highest score (or at least the range)
     List<Document> col = new ArrayList<>();
@@ -170,7 +175,9 @@ public class Window extends PApplet{
       String name = (String) col.get(i).get("userName");
       int playerScore = Integer.parseInt(col.get(i).get("score").toString());
       System.out.println("name: " + name + " score: " + playerScore);
+      text(i+1 +". user name: " + name + ", Score: " + playerScore, 210, this.height-450+i*50);
     }
+
   }
 
   public void showTitle() {
@@ -242,18 +249,18 @@ public class Window extends PApplet{
     // 1) remained turns : + (100 - current turn) * 10
     // 2) difference from other players' HP : (my HP - other's HP) *20
     // 3) plus current score
-    int finalScore = 0;
+
 
     switch (winner) {
       case 1 -> {
         leftPlayer.score += (100 - this.turnCnt);
         leftPlayer.score += (leftPlayer.getHp() - rightPlayer.getHp());
-        finalScore = leftPlayer.score;
+        this.finalScore = leftPlayer.score;
       }
       case 2 -> {
         rightPlayer.score += (100 - this.turnCnt);
         rightPlayer.score += (rightPlayer.getHp() - leftPlayer.getHp());
-        finalScore = rightPlayer.score;
+        this.finalScore = rightPlayer.score;
       }
       default -> {
       }
